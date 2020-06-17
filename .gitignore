@@ -352,3 +352,4 @@ MigrationBackup/
 /sfmlproj/sfmlproj.vcxproj
 /sfmlproj/sfmlproj.vcxproj.filters
 /sfmlproj/sfmlproj.sln
+/out/build
