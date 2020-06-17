@@ -353,3 +353,4 @@ MigrationBackup/
 /sfmlproj/sfmlproj.vcxproj.filters
 /sfmlproj/sfmlproj.sln
 /out/build
+/CMakeSettings.json
