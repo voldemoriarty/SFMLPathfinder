@@ -155,6 +155,8 @@ int main()
     bool isMousePressed = false;
     bool inFocus = false;
 
+    // lock at 30fps
+    window.setFramerateLimit(30);
 
     while (window.isOpen())
     {
