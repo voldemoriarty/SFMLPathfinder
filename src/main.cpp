@@ -1,12 +1,103 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Main.hpp>
 
-//test program
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+#include <cmath>
+
+// draw a simple grid with rects
+
+struct Grid {
+
+    // all rects in this vector will be drawn
+    std::vector<sf::RectangleShape> _rects;
+
+    // grid dimensions
+    unsigned nRows, nCols;
+
+    // size of each rect
+    sf::Vector2f size;
+
+    Grid(const unsigned nRows, const unsigned nCols, const sf::VideoMode windowDim) : nRows(nRows), nCols(nCols), _rects(nRows* nCols) {
+        // make each rectangle of same color
+        // and size
+
+        // window width = nCols * (rectWidth)
+        // same for height
+
+        // calculate size of single rectangle
+        size = sf::Vector2f(windowDim.width / nCols, windowDim.height / nRows);
+
+        // set the outline percentage (of width)
+        const float outline = 0.05 * size.x;
+
+        for (auto i = 0; i < nRows; ++i) {
+            for (auto j = 0; j < nCols; ++j) {
+                sf::RectangleShape rect;
+                rect.setSize(size);
+                rect.setFillColor(sf::Color::Blue);
+                rect.setOutlineThickness(-outline);
+                rect.setOutlineColor(sf::Color::Black);
+
+                // set the position in the matrix
+                rect.setPosition(i * size.x, j * size.y);
+
+                // add the rects to the drawing vector
+                _rects.push_back(rect);
+            }
+        }
+
+    }
+
+    void draw(sf::RenderWindow& window) {
+        window.clear();
+
+        // draw them rects
+        for (auto& rect : _rects) {
+            window.draw(rect);
+        }
+        window.display();
+    }
+
+    void mouseClick(const sf::Vector2f pos) {
+        for (auto& rect : _rects) {
+            if (rect.getGlobalBounds().contains(pos)) {
+                if (rect.getFillColor() == sf::Color::Blue) {
+                    rect.setFillColor(sf::Color::Yellow);
+                }
+                else {
+                    rect.setFillColor(sf::Color::Blue);
+                }
+            }
+        }
+    }
+
+    void mouseHover(const sf::Vector2f pos) {
+        for (auto& rect : _rects) {
+            if (rect.getGlobalBounds().contains(pos)) {
+                rect.setOutlineColor(sf::Color::Green);
+            }
+            else {
+                rect.setOutlineColor(sf::Color::Black);
+            }
+        }
+    }
+};
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML now works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Red);
+    const unsigned nRows = 5;
+    const unsigned nCols = 5;
+
+    sf::VideoMode     mode(600, 600);
+    sf::RenderWindow  window(mode, "Grid");
+
+    Grid grid(nRows, nCols, mode);
+
+    bool isMousePressed = false;
+    bool inFocus = false;
+
 
     while (window.isOpen())
     {
@@ -15,11 +106,36 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            else if (event.type == sf::Event::GainedFocus)
+                inFocus = true;
+            else if (event.type == sf::Event::LostFocus)
+                inFocus = false;
         }
 
-        window.clear();
-        window.draw(shape);
-        window.display();
+        if (inFocus) {
+            // mouse pos rel to window
+            auto mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+            // implement edge detection on mouse clicks
+            // since sfml doesnt provide it
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                if (!isMousePressed) {
+                    // at this point the edge of the click occured
+                    // handle it
+                    grid.mouseClick(mousePos);
+                    isMousePressed = true;
+                }
+            }
+            else {
+                isMousePressed = false;
+            }
+
+            // handle mouse hover
+            grid.mouseHover(mousePos);
+        }
+        // draw
+        grid.draw(window);
     }
 
     return 0;
