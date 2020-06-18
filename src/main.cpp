@@ -19,7 +19,10 @@ struct Grid {
     // size of each rect
     sf::Vector2f size;
 
-    Grid(const unsigned nRows, const unsigned nCols, const sf::VideoMode windowDim) : nRows(nRows), nCols(nCols), _rects(nRows* nCols) {
+    Grid(const unsigned nRows, const unsigned nCols, const sf::VideoMode windowDim) : 
+    nRows(nRows), 
+    nCols(nCols), 
+    _rects(nRows* nCols) {
         // make each rectangle of same color
         // and size
 
