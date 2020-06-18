@@ -72,12 +72,32 @@ struct Grid {
         } 
     }
 
-    void mouseHandle(const sf::Vector2f pos, bool clicked) {
+    void mouseHandle(sf::RenderWindow &window) {
+        static bool isMousePressed = false;
+
+        // mouse pos rel to window
+        auto mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+        // implement edge detection on mouse clicks
+        // since sfml doesnt provide it
+        bool mouseClickEdge = false;
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            if (!isMousePressed) {
+                // at this point the edge of the click occured
+                mouseClickEdge = true;
+                isMousePressed = true;
+            }
+        }
+        else {
+            isMousePressed = false;
+        }
+
         for (auto& rect : _rects) {
-            bool inside = rect.getGlobalBounds().contains(pos);
+            bool inside = rect.getGlobalBounds().contains(mousePos);
             if (inside) {
                 rect.setOutlineColor(sf::Color::Green);
-                if (clicked) {
+                if (mouseClickEdge) {
                     toggleRect(rect);
                 }
             }
@@ -90,8 +110,8 @@ struct Grid {
 
 int main()
 {
-    const unsigned nRows = 5;
-    const unsigned nCols = 5;
+    const unsigned nRows = 15;
+    const unsigned nCols = 15;
 
     sf::VideoMode     mode(600, 600);
     sf::RenderWindow  window(mode, "Grid");
@@ -116,29 +136,9 @@ int main()
         }
 
         if (inFocus) {
-            // mouse pos rel to window
-            auto mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-            // implement edge detection on mouse clicks
-            // since sfml doesnt provide it
-
-            bool mouseClickEdge = false;
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                if (!isMousePressed) {
-                    // at this point the edge of the click occured
-                    // handle it
-                    mouseClickEdge = true;
-                    isMousePressed = true;
-                }
-            }
-            else {
-                isMousePressed = false;
-            }
-
-            // handle mouse hover
-            grid.mouseHandle(mousePos, mouseClickEdge);
+            grid.mouseHandle(window);
         }
-        // draw
+
         grid.draw(window);
     }
 
