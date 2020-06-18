@@ -30,8 +30,34 @@ struct Grid {
         resize(windowDim);
     }
 
+    void changeRC(const unsigned deltaR, const unsigned deltaC) {
+        nCols += deltaC;
+        nRows += deltaR;
+        resize(vidMode);
+    }
+
+    void incCols() {
+        changeRC(0, 1);
+    }
+
+    void incRows() {
+        changeRC(1, 0);
+    }
+
+    void decCols() {
+        if (nCols != 0) {
+            changeRC(0, -1);
+        }
+    }
+
+    void decRows() {
+        if (nRows != 0) {
+            changeRC(-1, 0);
+        }
+    }
+ 
     void resize(const sf::VideoMode &newSize) {
-        size = sf::Vector2f(newSize.width / nCols, newSize.height / nRows);
+        size = sf::Vector2f((float) newSize.width / nCols, (float) newSize.height / nRows);
 
         // clear the rects from the vector
         _rects.clear();
@@ -141,6 +167,14 @@ int main()
                 inFocus = true;
             else if (event.type == sf::Event::LostFocus)
                 inFocus = false;
+            else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Add) {
+                grid.incCols();
+                grid.incRows();
+            }
+            else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Subtract) {
+                grid.decCols();
+                grid.decRows();
+            }
         }
 
         if (inFocus) {
