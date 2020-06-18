@@ -354,3 +354,7 @@ MigrationBackup/
 /sfmlproj/sfmlproj.sln
 /out/build
 /CMakeSettings.json
+
+
+build
+.vscode
