@@ -60,23 +60,23 @@ struct Grid {
         window.display();
     }
 
-    void mouseClick(const sf::Vector2f pos) {
-        for (auto& rect : _rects) {
-            if (rect.getGlobalBounds().contains(pos)) {
-                if (rect.getFillColor() == sf::Color::Blue) {
-                    rect.setFillColor(sf::Color::Yellow);
-                }
-                else {
-                    rect.setFillColor(sf::Color::Blue);
-                }
-            }
+    void toggleRect(sf::RectangleShape &rect) {    
+        if (rect.getFillColor() == sf::Color::Blue) {
+            rect.setFillColor(sf::Color::Yellow);
         }
+        else {
+            rect.setFillColor(sf::Color::Blue);
+        } 
     }
 
-    void mouseHover(const sf::Vector2f pos) {
+    void mouseHandle(const sf::Vector2f pos, bool clicked) {
         for (auto& rect : _rects) {
-            if (rect.getGlobalBounds().contains(pos)) {
+            bool inside = rect.getGlobalBounds().contains(pos);
+            if (inside) {
                 rect.setOutlineColor(sf::Color::Green);
+                if (clicked) {
+                    toggleRect(rect);
+                }
             }
             else {
                 rect.setOutlineColor(sf::Color::Black);
@@ -119,11 +119,12 @@ int main()
             // implement edge detection on mouse clicks
             // since sfml doesnt provide it
 
+            bool mouseClickEdge = false;
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 if (!isMousePressed) {
                     // at this point the edge of the click occured
                     // handle it
-                    grid.mouseClick(mousePos);
+                    mouseClickEdge = true;
                     isMousePressed = true;
                 }
             }
@@ -132,7 +133,7 @@ int main()
             }
 
             // handle mouse hover
-            grid.mouseHover(mousePos);
+            grid.mouseHandle(mousePos, mouseClickEdge);
         }
         // draw
         grid.draw(window);

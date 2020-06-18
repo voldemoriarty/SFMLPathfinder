@@ -4,7 +4,12 @@ cmake_minimum_required(VERSION 2.8)
 project(SFMLPathfinder)
 
 # Set the sfml install path
-set (SFML_INSTALL_PATH "C:\\SFML-2.5.1")
+if (DEFINED ENV{SFML_ROOT})
+  set (SFML_INSTALL_PATH "$ENV{SFML_ROOT}")
+else()
+  set (SFML_INSTALL_PATH "C:\\SFML\\SFML-2.5.1")
+endif()
+
 set (SFML_DIR "${SFML_INSTALL_PATH}/lib/cmake/SFML")
 
 # locate SFML libs
