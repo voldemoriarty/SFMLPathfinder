@@ -163,12 +163,15 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
-            else if (event.type == sf::Event::GainedFocus)
+            }
+            else if (event.type == sf::Event::GainedFocus) {
                 inFocus = true;
-            else if (event.type == sf::Event::LostFocus)
+            }
+            else if (event.type == sf::Event::LostFocus) {
                 inFocus = false;
+            }
             else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Add) {
                 grid.incCols();
                 grid.incRows();
@@ -176,6 +179,9 @@ int main()
             else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Subtract) {
                 grid.decCols();
                 grid.decRows();
+            }
+            else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
+                window.close();
             }
         }
 
