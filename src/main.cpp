@@ -19,18 +19,22 @@ struct Grid {
     // size of each rect
     sf::Vector2f size;
 
+    // the window size info
+    sf::VideoMode vidMode;
+
     Grid(const unsigned nRows, const unsigned nCols, const sf::VideoMode windowDim) : 
     nRows(nRows), 
     nCols(nCols), 
+    vidMode(windowDim),
     _rects(nRows* nCols) {
-        // make each rectangle of same color
-        // and size
+        resize(windowDim);
+    }
 
-        // window width = nCols * (rectWidth)
-        // same for height
+    void resize(const sf::VideoMode &newSize) {
+        size = sf::Vector2f(newSize.width / nCols, newSize.height / nRows);
 
-        // calculate size of single rectangle
-        size = sf::Vector2f(windowDim.width / nCols, windowDim.height / nRows);
+        // clear the rects from the vector
+        _rects.clear();
 
         // set the outline percentage (of width)
         const float outline = 0.05 * size.x;
@@ -50,7 +54,6 @@ struct Grid {
                 _rects.push_back(rect);
             }
         }
-
     }
 
     void draw(sf::RenderWindow& window) {
@@ -113,10 +116,15 @@ int main()
     const unsigned nRows = 15;
     const unsigned nCols = 15;
 
-    sf::VideoMode     mode(600, 600);
-    sf::RenderWindow  window(mode, "Grid");
+    const unsigned gridW = 600;
+    const unsigned ctrlW = 300;
+    const unsigned windH = 600;
 
-    Grid grid(nRows, nCols, mode);
+    sf::VideoMode       gridMode(gridW, windH);
+    sf::VideoMode       ctrlMode(ctrlW, windH);
+    sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "Grid with Control Space");
+
+    Grid grid(nRows, nCols, gridMode);
 
     bool isMousePressed = false;
     bool inFocus = false;
