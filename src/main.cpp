@@ -153,7 +153,7 @@ int main()
     Grid grid(nRows, nCols, gridMode);
 
     bool isMousePressed = false;
-    bool inFocus = false;
+    bool inFocus = true;
 
     // lock at 30fps
     window.setFramerateLimit(30);
