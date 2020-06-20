@@ -9,9 +9,11 @@
 #include <vector>
 
 struct GridArtist {
+    // helper to create a 2D vector
+    using RowVector = std::vector<sf::RectangleShape>;
 
     // all rects in this vector will be drawn
-    std::vector<sf::RectangleShape> _rects;
+    std::vector<RowVector> _rects;
 
     // grid dimensions
     unsigned nRows, nCols;

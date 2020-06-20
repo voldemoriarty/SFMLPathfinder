@@ -10,7 +10,7 @@ GridArtist::GridArtist(const unsigned int nRows, const unsigned int nCols, sf::V
         nCols(nCols),
         vidMode(windowDim),
         origin(origin),
-        _rects((unsigned long long )nRows * nCols) {
+        _rects(nRows, std::vector<sf::RectangleShape>(nCols, sf::RectangleShape {})) {
     resize(windowDim);
 }
 
@@ -50,6 +50,7 @@ void GridArtist::resize(const sf::VideoMode &newSize) {
     const float outline = 0.05f * size.x;
 
     for (auto i = 0; i < nRows; ++i) {
+        _rects.emplace_back(RowVector{});
         for (auto j = 0; j < nCols; ++j) {
             sf::RectangleShape rect;
             sf::Vector2f pos(i * size.x, j * size.y);
@@ -63,16 +64,17 @@ void GridArtist::resize(const sf::VideoMode &newSize) {
             // add an offset to the origin
             rect.setPosition(pos + origin);
 
-            // add the rects to the drawing vector
-            _rects.push_back(rect);
+            _rects[i].emplace_back(rect);
         }
     }
 }
 
 void GridArtist::draw(sf::RenderWindow &window) {
     // draw them rects
-    for (auto& rect : _rects) {
-        window.draw(rect);
+    for (auto& row : _rects) {
+        for (auto& rect : row) {
+            window.draw(rect);
+        }
     }
 }
 
@@ -106,16 +108,17 @@ void GridArtist::mouseHandle(sf::RenderWindow &window) {
         isMousePressed = false;
     }
 
-    for (auto& rect : _rects) {
-        bool inside = rect.getGlobalBounds().contains(mousePos);
-        if (inside) {
-            rect.setOutlineColor(sf::Color::Green);
-            if (mouseClickEdge) {
-                toggleRect(rect);
+    for (auto& row : _rects) {
+        for (auto &rect : row) {
+            bool inside = rect.getGlobalBounds().contains(mousePos);
+            if (inside) {
+                rect.setOutlineColor(sf::Color::Green);
+                if (mouseClickEdge) {
+                    toggleRect(rect);
+                }
+            } else {
+                rect.setOutlineColor(sf::Color::Black);
             }
-        }
-        else {
-            rect.setOutlineColor(sf::Color::Black);
         }
     }
 }
