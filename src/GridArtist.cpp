@@ -10,7 +10,7 @@ GridArtist::GridArtist(const unsigned int nRows, const unsigned int nCols, sf::V
         nCols(nCols),
         vidMode(windowDim),
         origin(origin),
-        _rects(nRows, std::vector<sf::RectangleShape>(nCols, sf::RectangleShape {})) {
+        _rects(std::vector<RowVector> {}) {
     resize(windowDim);
 }
 
