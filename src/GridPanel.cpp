@@ -45,7 +45,9 @@ void GridPanel::resize(const sf::VideoMode &newSize) {
 
     // clear the rects from the vector
     rects.clear();
-    oldRect = nullptr;
+    oldRect     = nullptr;
+    startPoint  = nullptr;
+    endPoint    = nullptr;
 
     // set the outline percentage (of width)
     const float outline = 0.05f * size.x;
@@ -79,7 +81,7 @@ void GridPanel::draw(sf::RenderWindow &window) {
     }
 }
 
-void GridPanel::toggleRect(Rect &rect, RectType to) const {
+void GridPanel::toggleRect(Rect &rect, RectType to) {
     sf::Color newColor;
     switch (to) {
         case RectType::wall:
@@ -87,9 +89,17 @@ void GridPanel::toggleRect(Rect &rect, RectType to) const {
             break;
         case RectType::start:
             newColor = sf::Color::Green;
+            if (startPoint != nullptr) {
+                toggleRect(*startPoint, RectType::space);
+            }
+            startPoint = &rect;
             break;
         case RectType::end:
             newColor = sf::Color::Yellow;
+            if (endPoint != nullptr) {
+                toggleRect(*endPoint, RectType::space);
+            }
+            endPoint = &rect;
             break;
         case RectType::space:
             newColor = sf::Color::Blue;

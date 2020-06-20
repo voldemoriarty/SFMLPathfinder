@@ -20,7 +20,12 @@ struct GridPanel {
     std::vector<RowVector> rects;
 
     // the previous rect mouse was hovering on
+    // for outlining purposes
     sf::RectangleShape *oldRect = nullptr;
+
+    // allow only one start and end point
+    Rect *startPoint    = nullptr;
+    Rect *endPoint      = nullptr;
 
     // grid dimensions
     unsigned nRows, nCols;
@@ -86,7 +91,7 @@ struct GridPanel {
      * Toggle rect color against selected type in
      * the control panel
      */
-    void toggleRect(Rect &rect, RectType to) const;
+    void toggleRect(Rect &rect, RectType to);
 
     /*
      * Handle mouse in the window
