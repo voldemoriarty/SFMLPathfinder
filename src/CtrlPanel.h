@@ -10,6 +10,7 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 #include "GridPanel.h"
+#include "RectType.h"
 
 struct CtrlPanel {
     // the associated grid

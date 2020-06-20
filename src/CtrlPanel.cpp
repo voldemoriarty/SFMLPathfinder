@@ -3,6 +3,7 @@
 //
 
 #include "CtrlPanel.h"
+#include "algorithms/Bfs.h"
 
 CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         :
@@ -34,11 +35,58 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     ImGui::SetNextWindowPos(pos, ImGuiCond_Once);
     ImGui::SetNextWindowSize(size, ImGuiCond_Once);
 
-    ImGui::Begin("Control panel");
     ImGui::PushFont(font);
-    ImGui::Button("I'm a button");
-    ImGui::PopFont();
+    ImGui::Begin("Control panel");
+
+    // row, column sliders
+    {
+        ImGui::Text("Grid size selectors");
+
+        static int rows_old = (int) grid.nRows, cols_old = (int) grid.nCols;
+        static bool same = true;
+        int rows = (int) grid.nRows, cols = (int) grid.nCols;
+        ImGui::SliderInt("Rows", &rows, 3, 50);
+        ImGui::SliderInt("Columns", &cols, 3, 50);
+        ImGui::Checkbox("Same", &same);
+
+        bool colChanged = cols != cols_old;
+        bool rowChanged = rows != rows_old;
+
+        if (same & rowChanged) cols = rows;
+        if (same & colChanged) rows = cols;
+
+        if (rowChanged || colChanged && (rows > 0 && cols > 0)) {
+            grid.changeRC(rows - grid.nRows, cols - grid.nCols);
+            rows_old = rows;
+            cols_old = cols;
+        }
+
+        ImGui::Separator();
+    }
+
+    // starting and ending points
+    {
+        ImGui::Text("Select Rect type to place in grid");
+        ImGui::RadioButton("Start Point",(int *) &grid.rectType, 0);
+        ImGui::RadioButton("End Point",(int *) &grid.rectType, 1);
+        ImGui::RadioButton("Wall", (int *) &grid.rectType, 2);
+        ImGui::Separator();
+    }
+
+    // algorithms
+    {
+        ImGui::Text("Algorithms");
+        if (ImGui::Button("BFS")) {
+            static Bfs bfs;
+            bfs.run(grid);
+        }
+        if (ImGui::Button("Clear")) {
+            grid.clearAll();
+        }
+    }
+
     ImGui::End();
+    ImGui::PopFont();
 }
 
 void CtrlPanel::draw(sf::RenderWindow &window) {

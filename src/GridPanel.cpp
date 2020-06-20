@@ -45,7 +45,9 @@ void GridPanel::resize(const sf::VideoMode &newSize) {
 
     // clear the rects from the vector
     rects.clear();
-    oldRect = nullptr;
+    oldRect     = nullptr;
+    startPoint  = nullptr;
+    endPoint    = nullptr;
 
     // set the outline percentage (of width)
     const float outline = 0.05f * size.x;
@@ -54,7 +56,7 @@ void GridPanel::resize(const sf::VideoMode &newSize) {
         rects.emplace_back(RowVector{});
         for (auto j = 0; j < nCols; ++j) {
             sf::RectangleShape rect;
-            sf::Vector2f pos(i * size.x, j * size.y);
+            sf::Vector2f pos(j * size.x, i * size.y);
 
             rect.setSize(size);
             rect.setFillColor(sf::Color::Blue);
@@ -65,7 +67,7 @@ void GridPanel::resize(const sf::VideoMode &newSize) {
             // add an offset to the origin
             rect.setPosition(pos + origin);
 
-            rects[i].emplace_back(rect);
+            rects[i].emplace_back(std::make_pair(rect, RectType::space));
         }
     }
 }
@@ -74,17 +76,46 @@ void GridPanel::draw(sf::RenderWindow &window) {
     // draw them rects
     for (auto& row : rects) {
         for (auto& rect : row) {
-            window.draw(rect);
+            window.draw(rect.first);
         }
     }
 }
 
-void GridPanel::toggleRect(sf::RectangleShape &rect) {
-    if (rect.getFillColor() == sf::Color::Blue) {
-        rect.setFillColor(sf::Color::Yellow);
+void GridPanel::toggleRect(Rect &rect, RectType to) {
+    sf::Color newColor;
+    switch (to) {
+        case RectType::wall:
+            newColor = sf::Color::Red;
+            break;
+        case RectType::start:
+            newColor = sf::Color::Green;
+            if (startPoint != nullptr) {
+                toggleRect(*startPoint, RectType::space);
+            }
+            startPoint = &rect;
+            break;
+        case RectType::end:
+            newColor = sf::Color::Yellow;
+            if (endPoint != nullptr) {
+                toggleRect(*endPoint, RectType::space);
+            }
+            endPoint = &rect;
+            break;
+        case RectType::space:
+            newColor = sf::Color::Blue;
+            break;
+        case RectType::path:
+            newColor = sf::Color::Cyan;
+            break;
+    }
+
+    if (rect.second != to) {
+        rect.first.setFillColor(newColor);
+        rect.second = to;
     }
     else {
-        rect.setFillColor(sf::Color::Blue);
+        rect.first.setFillColor(sf::Color::Blue);
+        rect.second = RectType::space;
     }
 }
 
@@ -110,22 +141,31 @@ void GridPanel::mouseHandle(sf::RenderWindow &window) {
     }
 
     // find the rect in which the mouse cursor lies
-    auto rowIdx = (unsigned) mousePos.x / (unsigned) size.x;
-    auto colIdx = (unsigned) mousePos.y / (unsigned) size.y;
+    auto colIdx = (unsigned) mousePos.x / (unsigned) size.x;
+    auto rowIdx = (unsigned) mousePos.y / (unsigned) size.y;
 
     // need to remember the previous location of the mouse
     // so that we can turn its outline back to black when mouse
     // leaves it
 
     if (rowIdx < nRows && colIdx < nCols) {
-        auto *rect = &rects[rowIdx][colIdx];
+        auto &pair = rects[rowIdx][colIdx];
+        auto *rect = &pair.first;
+        auto &type = pair.second;
+
         rect->setOutlineColor(sf::Color::Green);
         if (oldRect != nullptr && oldRect != rect) {
             oldRect->setOutlineColor(sf::Color::Black);
         }
         oldRect = rect;
         if (mouseClickEdge) {
-            toggleRect(*rect);
+            // toggle the rect that was clicked. rectType is from
+            // the control panel. It tells to toggle to a wall, start, end etc...
+            toggleRect(pair, rectType);
+        }
+    } else {
+        if (oldRect != nullptr) {
+            oldRect->setOutlineColor(sf::Color::Black);
         }
     }
 }
@@ -144,5 +184,77 @@ void GridPanel::kbKeyRelHandle(sf::Event &e) {
 
         default:
             break;
+    }
+}
+
+GridPanel::Idx GridPanel::rectToIdx(GridPanel::Rect *rect) {
+    auto& shape = rect->first;
+    Idx index;
+    index.second = shape.getPosition().x / shape.getSize().x;
+    index.first  = shape.getPosition().y / shape.getSize().y;
+    return index;
+}
+
+GridPanel::Rect* GridPanel::findNeighbour(GridPanel::Rect *src, int dir) {
+    auto idx = rectToIdx(src);
+    auto row = idx.first;
+    auto col = idx.second;
+
+    Rect *ret;
+
+    switch (dir) {
+        case 0:
+            if (row == 0)
+                ret = nullptr;
+            else
+                ret = &rects[row - 1][col];
+            break;
+        case 1:
+            if (col == (nCols - 1))
+                ret =  nullptr;
+            else
+                ret =  &rects[row][col + 1];
+            break;
+        case 2:
+            if (row == (nRows - 1))
+                ret = nullptr;
+            else
+                ret = &rects[row + 1][col];
+            break;
+        case 3:
+            if (col == 0)
+                ret = nullptr;
+            else
+                ret = &rects[row][col - 1];
+            break;
+        default:
+            ret = nullptr;
+            break;
+    }
+    return ret;
+}
+
+void GridPanel::changeRect(GridPanel::Rect &rect, RectType to) {
+    if (rect.second != to) {
+        toggleRect(rect, to);
+    }
+}
+
+void GridPanel::clearAllPaths() {
+    for (auto & row: rects) {
+        for (auto & rect : row) {
+            if (rect.second == RectType::path)
+                changeRect(rect, RectType::space);
+        }
+    }
+}
+
+void GridPanel::clearAll() {
+    startPoint  = nullptr;
+    endPoint    = nullptr;
+    for (auto & row: rects) {
+        for (auto & rect : row) {
+            changeRect(rect, RectType::space);
+        }
     }
 }

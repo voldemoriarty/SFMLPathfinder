@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include "GridPanel.h"
 #include "CtrlPanel.h"
 
@@ -24,7 +23,7 @@ int main()
     sf::Clock deltaClock;
 
     // lock at 30fps
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(60);
 
     while (window.isOpen())
     {
@@ -58,5 +57,19 @@ int main()
         window.display();
     }
 
+    for (auto & row : grid.rects) {
+        for (auto & pair : row) {
+            char c;
+            switch (pair.second) {
+                case RectType::space:   c = '.'; break;
+                case RectType::wall:    c = '#'; break;
+                case RectType::start:   c = 'O'; break;
+                case RectType::end:     c = 'X'; break;
+                case RectType::path:    c = '='; break;
+            }
+            std::cout << c << ' ';
+        }
+        std::cout << std::endl;
+    }
     return 0;
 }
