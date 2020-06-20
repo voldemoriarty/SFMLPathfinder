@@ -120,16 +120,6 @@ struct GridPanel {
     void kbKeyRelHandle(sf::Event &e);
 
     /*
-     * Get the type of a rect in the grid
-     */
-    RectType getRectType(unsigned row, unsigned col);
-
-    /*
-     * Set the rect type
-     */
-    void setRectType(unsigned row, unsigned col, RectType type);
-
-    /*
      * Find the index of the rect
      */
     static Idx rectToIdx(Rect *rect);

@@ -65,6 +65,7 @@ int main()
                 case RectType::wall:    c = '#'; break;
                 case RectType::start:   c = 'O'; break;
                 case RectType::end:     c = 'X'; break;
+                case RectType::path:    c = '='; break;
             }
             std::cout << c << ' ';
         }

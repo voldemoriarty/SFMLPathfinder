@@ -187,20 +187,6 @@ void GridPanel::kbKeyRelHandle(sf::Event &e) {
     }
 }
 
-RectType GridPanel::getRectType(unsigned int row, unsigned int col) {
-    assert(row < nRows);
-    assert(col < nCols);
-    return rects[row][col].second;
-}
-
-void GridPanel::setRectType(unsigned int row, unsigned int col, RectType type) {
-    assert(row < nRows);
-    assert(col < nCols);
-
-    auto &pair = rects[row][col];
-    toggleRect(pair, type);
-}
-
 GridPanel::Idx GridPanel::rectToIdx(GridPanel::Rect *rect) {
     auto& shape = rect->first;
     Idx index;
@@ -214,34 +200,38 @@ GridPanel::Rect* GridPanel::findNeighbour(GridPanel::Rect *src, int dir) {
     auto row = idx.first;
     auto col = idx.second;
 
+    Rect *ret;
+
     switch (dir) {
         case 0:
             if (row == 0)
-                return nullptr;
+                ret = nullptr;
             else
-                return &rects[row - 1][col];
+                ret = &rects[row - 1][col];
             break;
         case 1:
             if (col == (nCols - 1))
-                return nullptr;
+                ret =  nullptr;
             else
-                return &rects[row][col + 1];
+                ret =  &rects[row][col + 1];
             break;
         case 2:
             if (row == (nRows - 1))
-                return nullptr;
+                ret = nullptr;
             else
-                return &rects[row + 1][col];
+                ret = &rects[row + 1][col];
             break;
         case 3:
             if (col == 0)
-                return nullptr;
+                ret = nullptr;
             else
-                return &rects[row][col - 1];
+                ret = &rects[row][col - 1];
             break;
         default:
-            return nullptr;
+            ret = nullptr;
+            break;
     }
+    return ret;
 }
 
 void GridPanel::changeRect(GridPanel::Rect &rect, RectType to) {
