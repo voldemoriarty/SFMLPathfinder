@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 project(SFMLPathfinder)
 
 # Set the sfml install path
-if (DEFINED ENV{SFML_ROOT})
-  set (SFML_INSTALL_PATH "$ENV{SFML_ROOT}")
+if (DEFINED ENV{SFML_INSTALL})
+  set (SFML_INSTALL_PATH "$ENV{SFML_INSTALL}")
 else()
   set (SFML_INSTALL_PATH "C:\\SFML\\SFML-2.5.1")
 endif()
@@ -32,6 +32,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui")
 
 # link options
 target_link_libraries(${PROJECT_NAME} sfml-graphics ${OPENGL_LIBRARIES})
+
+# copy any fonts needed to the build directory
+file (GLOB FONTS "fonts/*.ttf")
+file (COPY ${FONTS} DESTINATION ${PROJECT_BINARY_DIR})
 
 # copy dlls (windows)
 IF (WIN32)
