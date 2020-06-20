@@ -79,9 +79,9 @@ void GridPanel::draw(sf::RenderWindow &window) {
     }
 }
 
-void GridPanel::toggleRect(sf::RectangleShape &rect, RectType &type) const {
+void GridPanel::toggleRect(Rect &rect, RectType to) const {
     sf::Color newColor;
-    switch (rectType) {
+    switch (to) {
         case RectType::wall:
             newColor = sf::Color::Red;
             break;
@@ -96,13 +96,13 @@ void GridPanel::toggleRect(sf::RectangleShape &rect, RectType &type) const {
             break;
     }
 
-    if (rect.getFillColor() != newColor) {
-        rect.setFillColor(newColor);
-        type = rectType;
+    if (rect.second != rectType) {
+        rect.first.setFillColor(newColor);
+        rect.second = rectType;
     }
     else {
-        rect.setFillColor(sf::Color::Blue);
-        type = RectType::space;
+        rect.first.setFillColor(sf::Color::Blue);
+        rect.second = RectType::space;
     }
 }
 
@@ -146,7 +146,9 @@ void GridPanel::mouseHandle(sf::RenderWindow &window) {
         }
         oldRect = rect;
         if (mouseClickEdge) {
-            toggleRect(*rect, type);
+            // toggle the rect that was clicked. rectType is from
+            // the control panel. It tells to toggle to a wall, start, end etc...
+            toggleRect(pair, rectType);
         }
     } else {
         if (oldRect != nullptr) {

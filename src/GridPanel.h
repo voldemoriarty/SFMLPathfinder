@@ -86,7 +86,7 @@ struct GridPanel {
      * Toggle rect color against selected type in
      * the control panel
      */
-    void toggleRect(sf::RectangleShape &rect, RectType &type) const;
+    void toggleRect(Rect &rect, RectType to) const;
 
     /*
      * Handle mouse in the window
