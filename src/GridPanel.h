@@ -35,7 +35,7 @@ struct GridPanel {
     // these are input from the control panel
     // these control the color of the rect which is
     // clicked
-    RectType rectType;
+    RectType rectType = RectType::wall;
 
     /*
      * Create a grid of specified rows and cols divided evenly in a window of size
@@ -82,7 +82,7 @@ struct GridPanel {
     /*
      * Toggle rect color b/w blue and yellow
      */
-    void toggleRect(sf::RectangleShape &rect);
+    void toggleRect(sf::RectangleShape &rect) const;
 
     /*
      * Handle mouse in the window

@@ -79,7 +79,7 @@ void GridPanel::draw(sf::RenderWindow &window) {
     }
 }
 
-void GridPanel::toggleRect(sf::RectangleShape &rect) {
+void GridPanel::toggleRect(sf::RectangleShape &rect) const {
     sf::Color newColor;
     switch (rectType) {
         case RectType::wall:
