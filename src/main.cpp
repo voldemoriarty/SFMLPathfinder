@@ -1,8 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include <imgui-SFML.h>
-#include <imgui.h>
 #include <iostream>
 #include "GridPanel.h"
+#include "CtrlPanel.h"
 
 int main()
 {
@@ -17,20 +16,10 @@ int main()
     sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "Grid with Control Space");
 
     GridPanel grid(nRows, nCols, gridMode);
-
+    CtrlPanel ctrl(grid, sf::Vector2f(ctrlW, windH), sf::Vector2f(gridW, 0));
     bool inFocus = true;
 
-    ImGui::SFML::Init(window);
-    ImGui::StyleColorsLight();
-
-    // init fonts
-    auto& io    = ImGui::GetIO();
-    auto font   = io.Fonts->AddFontFromFileTTF("freesans.ttf", 20.0f);
-    ImGui::SFML::UpdateFontTexture();
-
-    if (font == nullptr) {
-        std::cerr << "Error loading font. Using default" << std::endl;
-    }
+    ctrl.init(window, "freesans.ttf", false);
 
     sf::Clock deltaClock;
 
@@ -62,24 +51,10 @@ int main()
             grid.mouseHandle(window);
         }
 
-        ImGui::SFML::Update(window, deltaClock.restart());
-
-        // set the position of panel
-        // run only once; the user can drag and change it
-        ImGui::SetNextWindowPos(sf::Vector2f(gridW, 0), ImGuiCond_Once);
-        ImGui::SetNextWindowSize(sf::Vector2f(ctrlW, windH), ImGuiCond_Once);
-
-        ImGui::Begin("Control panel");
-        ImGui::PushFont(font);
-        ImGui::Button("I'm a button");
-        ImGui::PopFont();
-        ImGui::End();
-
+        ctrl.loop(deltaClock.restart(), window);
         window.clear();
-
         grid.draw(window);
-        ImGui::SFML::Render(window);
-        
+        CtrlPanel::draw(window);
         window.display();
     }
 

@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 2.8)
 # set project name
 project(SFMLPathfinder)
 
+# set c++ standard
+set(CMAKE_CXX_STANDARD 17)
+
 # Set the sfml install path
 if (DEFINED ENV{SFML_INSTALL})
   set (SFML_INSTALL_PATH "$ENV{SFML_INSTALL}")
@@ -27,8 +30,8 @@ add_executable(${PROJECT_NAME}
   src/imgui/imgui-SFML.cpp
   src/GridPanel.cpp
   src/GridPanel.h
-  src/ControlPanel.cpp
-  src/ControlPanel.h
+        src/CtrlPanel.cpp
+        src/CtrlPanel.h
 )
 
 # include directories
