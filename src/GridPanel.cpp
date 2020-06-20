@@ -96,9 +96,9 @@ void GridPanel::toggleRect(Rect &rect, RectType to) const {
             break;
     }
 
-    if (rect.second != rectType) {
+    if (rect.second != to) {
         rect.first.setFillColor(newColor);
-        rect.second = rectType;
+        rect.second = to;
     }
     else {
         rect.first.setFillColor(sf::Color::Blue);
