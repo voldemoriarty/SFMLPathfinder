@@ -1,13 +1,10 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Main.hpp>
 
 #include <imgui-SFML.h>
 #include <imgui.h>
 
 #include <iostream>
 #include <vector>
-#include <stdexcept>
-#include <cmath>
 
 // draw a simple grid with rects
 
@@ -65,13 +62,13 @@ struct Grid {
     }
  
     void resize(const sf::VideoMode &newSize) {
-        size = sf::Vector2f((float) newSize.width / nCols, (float) newSize.height / nRows);
+        size = sf::Vector2f((float) newSize.width / (float) nCols, (float) newSize.height / (float) nRows);
 
         // clear the rects from the vector
         _rects.clear();
 
         // set the outline percentage (of width)
-        const float outline = 0.05 * size.x;
+        const float outline = 0.05f * size.x;
 
         for (auto i = 0; i < nRows; ++i) {
             for (auto j = 0; j < nCols; ++j) {
@@ -100,7 +97,7 @@ struct Grid {
         }
     }
 
-    void toggleRect(sf::RectangleShape &rect) {    
+    static void toggleRect(sf::RectangleShape &rect) {
         if (rect.getFillColor() == sf::Color::Blue) {
             rect.setFillColor(sf::Color::Yellow);
         }
@@ -143,6 +140,23 @@ struct Grid {
             }
         }
     }
+
+    void kbKeyRelHandle(sf::Event &e) {
+        switch (e.key.code) {
+            case sf::Keyboard::Add:
+                incCols();
+                incRows();
+                break;
+
+            case sf::Keyboard::Subtract:
+                decCols();
+                decRows();
+                break;
+
+            default:
+                break;
+        }
+    }
 };
 
 int main()
@@ -155,12 +169,10 @@ int main()
     const unsigned windH = 600;
 
     sf::VideoMode       gridMode(gridW, windH);
-    sf::VideoMode       ctrlMode(ctrlW, windH);
     sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "Grid with Control Space");
 
     Grid grid(nRows, nCols, gridMode);
 
-    bool isMousePressed = false;
     bool inFocus = true;
 
     ImGui::SFML::Init(window);
@@ -182,7 +194,7 @@ int main()
 
     while (window.isOpen())
     {
-        sf::Event event;
+        sf::Event event{};
         while (window.pollEvent(event))
         {
             ImGui::SFML::ProcessEvent(event);
@@ -196,16 +208,8 @@ int main()
             else if (event.type == sf::Event::LostFocus) {
                 inFocus = false;
             }
-            else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Add) {
-                grid.incCols();
-                grid.incRows();
-            }
-            else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Subtract) {
-                grid.decCols();
-                grid.decRows();
-            }
-            else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
-                window.close();
+            else if (event.type == sf::Event::KeyReleased) {
+                grid.kbKeyRelHandle(event);
             }
         }
 
