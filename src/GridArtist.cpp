@@ -10,7 +10,7 @@ GridArtist::GridArtist(const unsigned int nRows, const unsigned int nCols, sf::V
         nCols(nCols),
         vidMode(windowDim),
         origin(origin),
-        _rects(std::vector<RowVector> {}) {
+        rects(std::vector<RowVector> {}) {
     resize(windowDim);
 }
 
@@ -44,14 +44,14 @@ void GridArtist::resize(const sf::VideoMode &newSize) {
     size = sf::Vector2f((float) newSize.width / (float) nCols, (float) newSize.height / (float) nRows);
 
     // clear the rects from the vector
-    _rects.clear();
+    rects.clear();
     oldRect = nullptr;
 
     // set the outline percentage (of width)
     const float outline = 0.05f * size.x;
 
     for (auto i = 0; i < nRows; ++i) {
-        _rects.emplace_back(RowVector{});
+        rects.emplace_back(RowVector{});
         for (auto j = 0; j < nCols; ++j) {
             sf::RectangleShape rect;
             sf::Vector2f pos(i * size.x, j * size.y);
@@ -65,14 +65,14 @@ void GridArtist::resize(const sf::VideoMode &newSize) {
             // add an offset to the origin
             rect.setPosition(pos + origin);
 
-            _rects[i].emplace_back(rect);
+            rects[i].emplace_back(rect);
         }
     }
 }
 
 void GridArtist::draw(sf::RenderWindow &window) {
     // draw them rects
-    for (auto& row : _rects) {
+    for (auto& row : rects) {
         for (auto& rect : row) {
             window.draw(rect);
         }
@@ -118,7 +118,7 @@ void GridArtist::mouseHandle(sf::RenderWindow &window) {
     // leaves it
 
     if (rowIdx < nRows && colIdx < nCols) {
-        auto *rect = &_rects[rowIdx][colIdx];
+        auto *rect = &rects[rowIdx][colIdx];
         rect->setOutlineColor(sf::Color::Green);
         if (oldRect != nullptr && oldRect != rect) {
             oldRect->setOutlineColor(sf::Color::Black);

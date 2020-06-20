@@ -13,7 +13,7 @@ struct GridArtist {
     using RowVector = std::vector<sf::RectangleShape>;
 
     // all rects in this vector will be drawn
-    std::vector<RowVector> _rects;
+    std::vector<RowVector> rects;
 
     // the previous rect mouse was hovering on
     sf::RectangleShape *oldRect = nullptr;
