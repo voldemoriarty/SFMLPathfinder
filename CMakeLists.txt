@@ -30,9 +30,10 @@ add_executable(${PROJECT_NAME}
   src/imgui/imgui-SFML.cpp
   src/GridPanel.cpp
   src/GridPanel.h
-        src/CtrlPanel.cpp
-        src/CtrlPanel.h
-        src/RectType.h)
+  src/CtrlPanel.cpp
+  src/CtrlPanel.h
+  src/RectType.h
+  src/algorithms/Algorithm.h src/algorithms/Bfs.h src/algorithms/Bfs.cpp)
 
 # include directories
 target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui")

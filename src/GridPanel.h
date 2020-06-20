@@ -15,6 +15,7 @@ struct GridPanel {
     // helper to create a 2D vector
     using Rect      = std::pair<sf::RectangleShape, RectType>;
     using RowVector = std::vector<Rect>;
+    using Idx       = std::pair<unsigned int, unsigned int>;
 
     // all rects in this vector will be drawn
     std::vector<RowVector> rects;
@@ -112,6 +113,20 @@ struct GridPanel {
      * Set the rect type
      */
     void setRectType(unsigned row, unsigned col, RectType type);
+
+    /*
+     * Find the index of the rect
+     */
+    static Idx rectToIdx(Rect *rect);
+
+    /*
+     * return the neighbour rect
+     * 0 -> north
+     * 1 -> east
+     * 2 -> south
+     * 3 -> west
+     */
+    Rect* findNeighbour(Rect *src, int dir);
 };
 
 #endif //SFMLPATHFINDER_GRIDPANEL_H

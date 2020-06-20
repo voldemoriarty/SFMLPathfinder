@@ -104,6 +104,9 @@ void GridPanel::toggleRect(Rect &rect, RectType to) {
         case RectType::space:
             newColor = sf::Color::Blue;
             break;
+        case RectType::path:
+            newColor = sf::Color::Cyan;
+            break;
     }
 
     if (rect.second != to) {
@@ -196,4 +199,47 @@ void GridPanel::setRectType(unsigned int row, unsigned int col, RectType type) {
 
     auto &pair = rects[row][col];
     toggleRect(pair, type);
+}
+
+GridPanel::Idx GridPanel::rectToIdx(GridPanel::Rect *rect) {
+    auto& shape = rect->first;
+    Idx index;
+    index.second = shape.getPosition().x / shape.getSize().x;
+    index.first  = shape.getPosition().y / shape.getSize().y;
+    return index;
+}
+
+GridPanel::Rect* GridPanel::findNeighbour(GridPanel::Rect *src, int dir) {
+    auto idx = rectToIdx(src);
+    auto row = idx.first;
+    auto col = idx.second;
+
+    switch (dir) {
+        case 0:
+            if (row == 0)
+                return nullptr;
+            else
+                return &rects[row - 1][col];
+            break;
+        case 1:
+            if (col == (nCols - 1))
+                return nullptr;
+            else
+                return &rects[row][col + 1];
+            break;
+        case 2:
+            if (row == (nRows - 1))
+                return nullptr;
+            else
+                return &rects[row + 1][col];
+            break;
+        case 3:
+            if (col == 0)
+                return nullptr;
+            else
+                return &rects[row][col - 1];
+            break;
+        default:
+            return nullptr;
+    }
 }

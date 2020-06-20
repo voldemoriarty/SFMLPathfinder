@@ -9,7 +9,8 @@ enum class RectType : int {
     start = 0,  // start node
     end,        // end node
     wall,       // blocking node
-    space       // empty space
+    space,      // empty space
+    path        // path from source to dest
 };
 
 #endif //SFMLPATHFINDER_RECTTYPE_H
