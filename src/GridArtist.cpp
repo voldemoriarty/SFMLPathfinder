@@ -97,7 +97,7 @@ void GridArtist::mouseHandle(sf::RenderWindow &window) {
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         if (!isMousePressed) {
-            // at this point the edge of the click occured
+            // at this point the edge of the click occurred
             mouseClickEdge = true;
             isMousePressed = true;
         }

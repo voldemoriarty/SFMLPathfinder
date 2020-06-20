@@ -26,26 +26,61 @@ struct GridArtist {
     // this acts as the (0,0)
     sf::Vector2f origin;
 
+    /*
+     * Create a grid of specified rows and cols divided evenly in a window of size
+     * windowDim and starting position origin
+     */
     GridArtist(unsigned nRows, unsigned nCols, sf::VideoMode windowDim, sf::Vector2f origin = sf::Vector2f(0, 0));
 
+    /*
+     * Increase row and cols by given amount
+     * put -ve values to decrease
+     */
     void changeRC(unsigned deltaR, unsigned deltaC);
 
+    /*
+     * Increment cols by 1
+     */
     void incCols();
 
+    /*
+     * Increment rows by 1
+     */
     void incRows();
 
+    /*
+     * decrement cols by 1
+     */
     void decCols();
 
+    /*
+     * decrement rows by 1
+     */
     void decRows();
 
+    /*
+     * resize the rects to fit in new size.
+     */
     void resize(const sf::VideoMode &newSize);
 
+    /*
+     * Draw all rects to the render window
+     */
     void draw(sf::RenderWindow& window);
 
+    /*
+     * Toggle rect color b/w blue and yellow
+     */
     static void toggleRect(sf::RectangleShape &rect);
 
+    /*
+     * Handle mouse in the window
+     */
     void mouseHandle(sf::RenderWindow &window);
 
+    /*
+     * Handle keyboard key release event
+     */
     void kbKeyRelHandle(sf::Event &e);
 };
 
