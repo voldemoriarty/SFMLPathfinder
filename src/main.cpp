@@ -63,7 +63,9 @@ int main()
         }
 
         ImGui::SFML::Update(window, deltaClock.restart());
-        
+
+        // set the position of panel
+        // run only once; the user can drag and change it
         ImGui::SetNextWindowPos(sf::Vector2f(gridW, 0), ImGuiCond_Once);
         ImGui::SetNextWindowSize(sf::Vector2f(ctrlW, windH), ImGuiCond_Once);
 
