@@ -41,9 +41,6 @@ void Bfs::run(GridPanel &grid) {
                     discTable.insert_or_assign(neighbour, true);
                     parentTable.insert_or_assign(neighbour, v);
                     q.push(neighbour);
-                    auto idx = GridPanel::rectToIdx(neighbour);
-                    auto row = idx.first;
-                    auto col = idx.second;
                 }
             }
         }
