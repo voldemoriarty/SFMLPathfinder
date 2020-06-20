@@ -102,6 +102,11 @@ struct GridPanel {
      * Get the type of a rect in the grid
      */
     RectType getRectType(unsigned row, unsigned col);
+
+    /*
+     * Set the rect type
+     */
+    void setRectType(unsigned row, unsigned col, RectType type);
 };
 
 #endif //SFMLPATHFINDER_GRIDPANEL_H

@@ -179,3 +179,11 @@ RectType GridPanel::getRectType(unsigned int row, unsigned int col) {
     assert(col < nCols);
     return rects[row][col].second;
 }
+
+void GridPanel::setRectType(unsigned int row, unsigned int col, RectType type) {
+    assert(row < nRows);
+    assert(col < nCols);
+
+    auto &pair = rects[row][col];
+    toggleRect(pair, type);
+}
