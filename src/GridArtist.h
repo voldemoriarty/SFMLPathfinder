@@ -15,6 +15,9 @@ struct GridArtist {
     // all rects in this vector will be drawn
     std::vector<RowVector> _rects;
 
+    // the previous rect mouse was hovering on
+    sf::RectangleShape *oldRect = nullptr;
+
     // grid dimensions
     unsigned nRows, nCols;
 

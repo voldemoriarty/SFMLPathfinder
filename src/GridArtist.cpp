@@ -45,6 +45,7 @@ void GridArtist::resize(const sf::VideoMode &newSize) {
 
     // clear the rects from the vector
     _rects.clear();
+    oldRect = nullptr;
 
     // set the outline percentage (of width)
     const float outline = 0.05f * size.x;
@@ -108,17 +109,23 @@ void GridArtist::mouseHandle(sf::RenderWindow &window) {
         isMousePressed = false;
     }
 
-    for (auto& row : _rects) {
-        for (auto &rect : row) {
-            bool inside = rect.getGlobalBounds().contains(mousePos);
-            if (inside) {
-                rect.setOutlineColor(sf::Color::Green);
-                if (mouseClickEdge) {
-                    toggleRect(rect);
-                }
-            } else {
-                rect.setOutlineColor(sf::Color::Black);
-            }
+    // find the rect in which the mouse cursor lies
+    auto rowIdx = (unsigned) mousePos.x / (unsigned) size.x;
+    auto colIdx = (unsigned) mousePos.y / (unsigned) size.y;
+
+    // need to remember the previous location of the mouse
+    // so that we can turn its outline back to black when mouse
+    // leaves it
+
+    if (rowIdx < nRows && colIdx < nCols) {
+        auto *rect = &_rects[rowIdx][colIdx];
+        rect->setOutlineColor(sf::Color::Green);
+        if (oldRect != nullptr && oldRect != rect) {
+            oldRect->setOutlineColor(sf::Color::Black);
+        }
+        oldRect = rect;
+        if (mouseClickEdge) {
+            toggleRect(*rect);
         }
     }
 }
