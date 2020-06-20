@@ -7,11 +7,14 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <utility>
+#include <cassert>
 #include "RectType.h"
 
 struct GridPanel {
     // helper to create a 2D vector
-    using RowVector = std::vector<sf::RectangleShape>;
+    using Rect      = std::pair<sf::RectangleShape, RectType>;
+    using RowVector = std::vector<Rect>;
 
     // all rects in this vector will be drawn
     std::vector<RowVector> rects;
@@ -80,9 +83,10 @@ struct GridPanel {
     void draw(sf::RenderWindow& window);
 
     /*
-     * Toggle rect color b/w blue and yellow
+     * Toggle rect color against selected type in
+     * the control panel
      */
-    void toggleRect(sf::RectangleShape &rect) const;
+    void toggleRect(sf::RectangleShape &rect, RectType &type) const;
 
     /*
      * Handle mouse in the window
@@ -93,6 +97,11 @@ struct GridPanel {
      * Handle keyboard key release event
      */
     void kbKeyRelHandle(sf::Event &e);
+
+    /*
+     * Get the type of a rect in the grid
+     */
+    RectType getRectType(unsigned row, unsigned col);
 };
 
 #endif //SFMLPATHFINDER_GRIDPANEL_H

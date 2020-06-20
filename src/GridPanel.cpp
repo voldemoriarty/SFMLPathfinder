@@ -65,7 +65,7 @@ void GridPanel::resize(const sf::VideoMode &newSize) {
             // add an offset to the origin
             rect.setPosition(pos + origin);
 
-            rects[i].emplace_back(rect);
+            rects[i].emplace_back(std::make_pair(rect, RectType::space));
         }
     }
 }
@@ -74,12 +74,12 @@ void GridPanel::draw(sf::RenderWindow &window) {
     // draw them rects
     for (auto& row : rects) {
         for (auto& rect : row) {
-            window.draw(rect);
+            window.draw(rect.first);
         }
     }
 }
 
-void GridPanel::toggleRect(sf::RectangleShape &rect) const {
+void GridPanel::toggleRect(sf::RectangleShape &rect, RectType &type) const {
     sf::Color newColor;
     switch (rectType) {
         case RectType::wall:
@@ -91,13 +91,18 @@ void GridPanel::toggleRect(sf::RectangleShape &rect) const {
         case RectType::end:
             newColor = sf::Color::Yellow;
             break;
+        case RectType::space:
+            newColor = sf::Color::Blue;
+            break;
     }
 
     if (rect.getFillColor() != newColor) {
         rect.setFillColor(newColor);
+        type = rectType;
     }
     else {
         rect.setFillColor(sf::Color::Blue);
+        type = RectType::space;
     }
 }
 
@@ -131,14 +136,17 @@ void GridPanel::mouseHandle(sf::RenderWindow &window) {
     // leaves it
 
     if (rowIdx < nRows && colIdx < nCols) {
-        auto *rect = &rects[rowIdx][colIdx];
+        auto &pair = rects[rowIdx][colIdx];
+        auto *rect = &pair.first;
+        auto &type = pair.second;
+
         rect->setOutlineColor(sf::Color::Green);
         if (oldRect != nullptr && oldRect != rect) {
             oldRect->setOutlineColor(sf::Color::Black);
         }
         oldRect = rect;
         if (mouseClickEdge) {
-            toggleRect(*rect);
+            toggleRect(*rect, type);
         }
     } else {
         if (oldRect != nullptr) {
@@ -162,4 +170,10 @@ void GridPanel::kbKeyRelHandle(sf::Event &e) {
         default:
             break;
     }
+}
+
+RectType GridPanel::getRectType(unsigned int row, unsigned int col) {
+    assert(row < nRows);
+    assert(col < nCols);
+    return rects[row][col].second;
 }

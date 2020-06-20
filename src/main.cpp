@@ -57,5 +57,18 @@ int main()
         window.display();
     }
 
+    for (auto & row : grid.rects) {
+        for (auto & pair : row) {
+            char c;
+            switch (pair.second) {
+                case RectType::space:   c = '.'; break;
+                case RectType::wall:    c = '#'; break;
+                case RectType::start:   c = 'O'; break;
+                case RectType::end:     c = 'X'; break;
+            }
+            std::cout << c << ' ';
+        }
+        std::cout << std::endl;
+    }
     return 0;
 }
