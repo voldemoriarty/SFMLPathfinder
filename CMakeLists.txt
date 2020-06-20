@@ -20,11 +20,13 @@ find_package(OpenGL REQUIRED)
 
 # create the executable
 add_executable(${PROJECT_NAME} 
-  "src/main.cpp"
-  "src/imgui/imgui.cpp"
-  "src/imgui/imgui_widgets.cpp"
-  "src/imgui/imgui_draw.cpp"
-  "src/imgui/imgui-SFML.cpp"
+  src/main.cpp
+  src/imgui/imgui.cpp
+  src/imgui/imgui_widgets.cpp
+  src/imgui/imgui_draw.cpp
+  src/imgui/imgui-SFML.cpp
+  src/GridArtist.cpp
+  src/GridArtist.h
 )
 
 # include directories
