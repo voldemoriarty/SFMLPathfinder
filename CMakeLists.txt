@@ -32,7 +32,7 @@ add_executable(${PROJECT_NAME}
   src/GridPanel.h
         src/CtrlPanel.cpp
         src/CtrlPanel.h
-)
+        src/RectType.h)
 
 # include directories
 target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui")

@@ -42,7 +42,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         ImGui::Text("Grid size selectors");
 
         static int rows_old = (int) grid.nRows, cols_old = (int) grid.nCols;
-        static bool same = false;
+        static bool same = true;
         int rows = (int) grid.nRows, cols = (int) grid.nCols;
         ImGui::SliderInt("Rows", &rows, 3, 50);
         ImGui::SliderInt("Columns", &cols, 3, 50);
@@ -60,6 +60,15 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
             cols_old = cols;
         }
 
+        ImGui::Separator();
+    }
+
+    // starting and ending points
+    {
+        ImGui::Text("Select Rect Type");
+        ImGui::RadioButton("Start",(int *) &grid.rectType, 0);
+        ImGui::RadioButton("End",(int *) &grid.rectType, 1);
+        ImGui::RadioButton("Wall", (int *) &grid.rectType, 2);
         ImGui::Separator();
     }
 

@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "RectType.h"
 
 struct GridPanel {
     // helper to create a 2D vector
@@ -30,6 +31,11 @@ struct GridPanel {
     // origin of the grid
     // this acts as the (0,0)
     sf::Vector2f origin;
+
+    // these are input from the control panel
+    // these control the color of the rect which is
+    // clicked
+    RectType rectType;
 
     /*
      * Create a grid of specified rows and cols divided evenly in a window of size
@@ -76,7 +82,7 @@ struct GridPanel {
     /*
      * Toggle rect color b/w blue and yellow
      */
-    static void toggleRect(sf::RectangleShape &rect);
+    void toggleRect(sf::RectangleShape &rect);
 
     /*
      * Handle mouse in the window
@@ -88,6 +94,5 @@ struct GridPanel {
      */
     void kbKeyRelHandle(sf::Event &e);
 };
-
 
 #endif //SFMLPATHFINDER_GRIDPANEL_H

@@ -80,8 +80,21 @@ void GridPanel::draw(sf::RenderWindow &window) {
 }
 
 void GridPanel::toggleRect(sf::RectangleShape &rect) {
-    if (rect.getFillColor() == sf::Color::Blue) {
-        rect.setFillColor(sf::Color::Yellow);
+    sf::Color newColor;
+    switch (rectType) {
+        case RectType::wall:
+            newColor = sf::Color::Red;
+            break;
+        case RectType::start:
+            newColor = sf::Color::Green;
+            break;
+        case RectType::end:
+            newColor = sf::Color::Yellow;
+            break;
+    }
+
+    if (rect.getFillColor() != newColor) {
+        rect.setFillColor(newColor);
     }
     else {
         rect.setFillColor(sf::Color::Blue);
