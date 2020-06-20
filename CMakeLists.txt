@@ -15,11 +15,23 @@ set (SFML_DIR "${SFML_INSTALL_PATH}/lib/cmake/SFML")
 # locate SFML libs
 find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
 
+# find openGL
+find_package(OpenGL REQUIRED)
+
 # create the executable
-add_executable(${PROJECT_NAME} "src/main.cpp")
+add_executable(${PROJECT_NAME} 
+  "src/main.cpp"
+  "src/imgui/imgui.cpp"
+  "src/imgui/imgui_widgets.cpp"
+  "src/imgui/imgui_draw.cpp"
+  "src/imgui/imgui-SFML.cpp"
+)
+
+# include directories
+target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui")
 
 # link options
-target_link_libraries(${PROJECT_NAME} sfml-graphics)
+target_link_libraries(${PROJECT_NAME} sfml-graphics ${OPENGL_LIBRARIES})
 
 # copy dlls (windows)
 IF (WIN32)

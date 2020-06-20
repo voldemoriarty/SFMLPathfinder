@@ -1,6 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Main.hpp>
 
+#include <imgui-SFML.h>
+#include <imgui.h>
+
 #include <iostream>
 #include <vector>
 #include <stdexcept>
@@ -83,13 +86,10 @@ struct Grid {
     }
 
     void draw(sf::RenderWindow& window) {
-        window.clear();
-
         // draw them rects
         for (auto& rect : _rects) {
             window.draw(rect);
         }
-        window.display();
     }
 
     void toggleRect(sf::RectangleShape &rect) {    
@@ -155,6 +155,9 @@ int main()
     bool isMousePressed = false;
     bool inFocus = false;
 
+    ImGui::SFML::Init(window);
+    sf::Clock deltaClock;
+
     // lock at 30fps
     window.setFramerateLimit(30);
 
@@ -163,6 +166,8 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            ImGui::SFML::ProcessEvent(event);
+
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
@@ -189,7 +194,18 @@ int main()
             grid.mouseHandle(window);
         }
 
+        ImGui::SFML::Update(window, deltaClock.restart());
+        
+        ImGui::Begin("Hello, World!");
+        ImGui::Button("I'm a button");
+        ImGui::End();
+
+        window.clear();
+
         grid.draw(window);
+        ImGui::SFML::Render(window);
+        
+        window.display();
     }
 
     return 0;
