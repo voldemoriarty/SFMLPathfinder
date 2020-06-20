@@ -7,6 +7,7 @@
 void Bfs::run(GridPanel &grid) {
     discTable.clear();
     parentTable.clear();
+    grid.clearAllPaths();
 
     auto start      = grid.startPoint;
     auto end        = grid.endPoint;
@@ -25,7 +26,7 @@ void Bfs::run(GridPanel &grid) {
         q.pop();
 
         if (v == end) {
-            return;
+            break;
         }
 
         // iterate all the neighbours
@@ -40,6 +41,9 @@ void Bfs::run(GridPanel &grid) {
                     discTable.insert_or_assign(neighbour, true);
                     parentTable.insert_or_assign(neighbour, v);
                     q.push(neighbour);
+                    auto idx = GridPanel::rectToIdx(neighbour);
+                    auto row = idx.first;
+                    auto col = idx.second;
                 }
             }
         }
@@ -56,8 +60,12 @@ void Bfs::run(GridPanel &grid) {
         // path exists
         auto rect = parentItr->second;
         while (rect != start) {
-            grid.toggleRect(*rect, RectType::path);
+            grid.changeRect(*rect, RectType::path);
             rect = parentTable[rect];
         }
     }
+
+    // empty the queue
+    while (!q.empty())
+        q.pop();
 }

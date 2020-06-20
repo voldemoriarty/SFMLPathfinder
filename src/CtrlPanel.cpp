@@ -3,6 +3,7 @@
 //
 
 #include "CtrlPanel.h"
+#include "algorithms/Bfs.h"
 
 CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         :
@@ -70,6 +71,18 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         ImGui::RadioButton("End Point",(int *) &grid.rectType, 1);
         ImGui::RadioButton("Wall", (int *) &grid.rectType, 2);
         ImGui::Separator();
+    }
+
+    // algorithms
+    {
+        ImGui::Text("Algorithms");
+        if (ImGui::Button("BFS")) {
+            static Bfs bfs;
+            bfs.run(grid);
+        }
+        if (ImGui::Button("Clear")) {
+            grid.clearAll();
+        }
     }
 
     ImGui::End();

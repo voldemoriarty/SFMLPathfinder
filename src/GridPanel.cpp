@@ -243,3 +243,28 @@ GridPanel::Rect* GridPanel::findNeighbour(GridPanel::Rect *src, int dir) {
             return nullptr;
     }
 }
+
+void GridPanel::changeRect(GridPanel::Rect &rect, RectType to) {
+    if (rect.second != to) {
+        toggleRect(rect, to);
+    }
+}
+
+void GridPanel::clearAllPaths() {
+    for (auto & row: rects) {
+        for (auto & rect : row) {
+            if (rect.second == RectType::path)
+                changeRect(rect, RectType::space);
+        }
+    }
+}
+
+void GridPanel::clearAll() {
+    startPoint  = nullptr;
+    endPoint    = nullptr;
+    for (auto & row: rects) {
+        for (auto & rect : row) {
+            changeRect(rect, RectType::space);
+        }
+    }
+}

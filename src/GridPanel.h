@@ -95,6 +95,21 @@ struct GridPanel {
     void toggleRect(Rect &rect, RectType to);
 
     /*
+     * change rect type and color accordingly
+     */
+    void changeRect(Rect &rect, RectType to);
+
+    /*
+     * clear all rects who are of type path
+     */
+    void clearAllPaths();
+
+    /*
+     * clear all rects to space
+     */
+    void clearAll();
+
+    /*
      * Handle mouse in the window
      */
     void mouseHandle(sf::RenderWindow &window);
