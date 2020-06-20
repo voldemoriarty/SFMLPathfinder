@@ -36,7 +36,23 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
     ImGui::PushFont(font);
     ImGui::Begin("Control panel");
-    ImGui::Button("I'm a button");
+
+    // row, column sliders
+    {
+        ImGui::Text("Grid size selectors. Ctrl+Click to enter value");
+
+        static int rows_old = 15, cols_old = 15;
+        int rows = rows_old, cols = cols_old;
+        ImGui::SliderInt("Rows", &rows, 1, 100);
+        ImGui::SliderInt("Cols", &cols, 1, 100);
+
+        if (rows != rows_old || cols != cols_old) {
+            grid.changeRC(rows - grid.nRows, cols - grid.nCols);
+            rows_old = rows;
+            cols_old = cols;
+        }
+    }
+
     ImGui::End();
     ImGui::PopFont();
 }

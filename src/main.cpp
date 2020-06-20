@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include "GridPanel.h"
 #include "CtrlPanel.h"
 

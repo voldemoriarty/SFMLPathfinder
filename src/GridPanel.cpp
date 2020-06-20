@@ -54,7 +54,7 @@ void GridPanel::resize(const sf::VideoMode &newSize) {
         rects.emplace_back(RowVector{});
         for (auto j = 0; j < nCols; ++j) {
             sf::RectangleShape rect;
-            sf::Vector2f pos(i * size.x, j * size.y);
+            sf::Vector2f pos(j * size.x, i * size.y);
 
             rect.setSize(size);
             rect.setFillColor(sf::Color::Blue);
@@ -110,8 +110,8 @@ void GridPanel::mouseHandle(sf::RenderWindow &window) {
     }
 
     // find the rect in which the mouse cursor lies
-    auto rowIdx = (unsigned) mousePos.x / (unsigned) size.x;
-    auto colIdx = (unsigned) mousePos.y / (unsigned) size.y;
+    auto colIdx = (unsigned) mousePos.x / (unsigned) size.x;
+    auto rowIdx = (unsigned) mousePos.y / (unsigned) size.y;
 
     // need to remember the previous location of the mouse
     // so that we can turn its outline back to black when mouse
@@ -126,6 +126,10 @@ void GridPanel::mouseHandle(sf::RenderWindow &window) {
         oldRect = rect;
         if (mouseClickEdge) {
             toggleRect(*rect);
+        }
+    } else {
+        if (oldRect != nullptr) {
+            oldRect->setOutlineColor(sf::Color::Black);
         }
     }
 }
