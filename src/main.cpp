@@ -204,7 +204,10 @@ int main()
 
         ImGui::SFML::Update(window, deltaClock.restart());
         
-        ImGui::Begin("Hello, World!");
+        ImGui::SetNextWindowPos(sf::Vector2f(gridW, 0), ImGuiCond_Once);
+        ImGui::SetNextWindowSize(sf::Vector2f(ctrlW, windH), ImGuiCond_Once);
+
+        ImGui::Begin("Control panel");
         ImGui::Button("I'm a button");
         ImGui::End();
 
