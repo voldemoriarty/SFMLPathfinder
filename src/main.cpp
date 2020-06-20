@@ -23,7 +23,7 @@ int main()
     sf::Clock deltaClock;
 
     // lock at 30fps
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(60);
 
     while (window.isOpen())
     {

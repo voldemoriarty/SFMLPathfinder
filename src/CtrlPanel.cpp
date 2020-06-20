@@ -39,18 +39,28 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
     // row, column sliders
     {
-        ImGui::Text("Grid size selectors. Ctrl+Click to enter value");
+        ImGui::Text("Grid size selectors");
 
         static int rows_old = 15, cols_old = 15;
+        static bool same = false;
         int rows = rows_old, cols = cols_old;
-        ImGui::SliderInt("Rows", &rows, 1, 100);
-        ImGui::SliderInt("Cols", &cols, 1, 100);
+        ImGui::SliderInt("Rows", &rows, 3, 50);
+        ImGui::SliderInt("Columns", &cols, 3, 50);
+        ImGui::Checkbox("Same", &same);
 
-        if (rows != rows_old || cols != cols_old) {
+        bool colChanged = cols != cols_old;
+        bool rowChanged = rows != rows_old;
+
+        if (same & rowChanged) cols = rows;
+        if (same & colChanged) rows = cols;
+
+        if (rowChanged || colChanged && (rows > 0 && cols > 0)) {
             grid.changeRC(rows - grid.nRows, cols - grid.nCols);
             rows_old = rows;
             cols_old = cols;
         }
+
+        ImGui::Separator();
     }
 
     ImGui::End();
