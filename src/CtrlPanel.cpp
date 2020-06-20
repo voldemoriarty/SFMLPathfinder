@@ -34,11 +34,11 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     ImGui::SetNextWindowPos(pos, ImGuiCond_Once);
     ImGui::SetNextWindowSize(size, ImGuiCond_Once);
 
-    ImGui::Begin("Control panel");
     ImGui::PushFont(font);
+    ImGui::Begin("Control panel");
     ImGui::Button("I'm a button");
-    ImGui::PopFont();
     ImGui::End();
+    ImGui::PopFont();
 }
 
 void CtrlPanel::draw(sf::RenderWindow &window) {
