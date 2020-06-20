@@ -1,141 +1,61 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Main.hpp>
-
 #include <iostream>
-#include <vector>
-#include <stdexcept>
-#include <cmath>
-
-// draw a simple grid with rects
-
-struct Grid {
-
-    // all rects in this vector will be drawn
-    std::vector<sf::RectangleShape> _rects;
-
-    // grid dimensions
-    unsigned nRows, nCols;
-
-    // size of each rect
-    sf::Vector2f size;
-
-    Grid(const unsigned nRows, const unsigned nCols, const sf::VideoMode windowDim) : nRows(nRows), nCols(nCols), _rects(nRows* nCols) {
-        // make each rectangle of same color
-        // and size
-
-        // window width = nCols * (rectWidth)
-        // same for height
-
-        // calculate size of single rectangle
-        size = sf::Vector2f(windowDim.width / nCols, windowDim.height / nRows);
-
-        // set the outline percentage (of width)
-        const float outline = 0.05 * size.x;
-
-        for (auto i = 0; i < nRows; ++i) {
-            for (auto j = 0; j < nCols; ++j) {
-                sf::RectangleShape rect;
-                rect.setSize(size);
-                rect.setFillColor(sf::Color::Blue);
-                rect.setOutlineThickness(-outline);
-                rect.setOutlineColor(sf::Color::Black);
-
-                // set the position in the matrix
-                rect.setPosition(i * size.x, j * size.y);
-
-                // add the rects to the drawing vector
-                _rects.push_back(rect);
-            }
-        }
-
-    }
-
-    void draw(sf::RenderWindow& window) {
-        window.clear();
-
-        // draw them rects
-        for (auto& rect : _rects) {
-            window.draw(rect);
-        }
-        window.display();
-    }
-
-    void mouseClick(const sf::Vector2f pos) {
-        for (auto& rect : _rects) {
-            if (rect.getGlobalBounds().contains(pos)) {
-                if (rect.getFillColor() == sf::Color::Blue) {
-                    rect.setFillColor(sf::Color::Yellow);
-                }
-                else {
-                    rect.setFillColor(sf::Color::Blue);
-                }
-            }
-        }
-    }
-
-    void mouseHover(const sf::Vector2f pos) {
-        for (auto& rect : _rects) {
-            if (rect.getGlobalBounds().contains(pos)) {
-                rect.setOutlineColor(sf::Color::Green);
-            }
-            else {
-                rect.setOutlineColor(sf::Color::Black);
-            }
-        }
-    }
-};
+#include "GridPanel.h"
+#include "CtrlPanel.h"
 
 int main()
 {
-    const unsigned nRows = 5;
-    const unsigned nCols = 5;
+    const unsigned nRows = 15;
+    const unsigned nCols = 15;
 
-    sf::VideoMode     mode(600, 600);
-    sf::RenderWindow  window(mode, "Grid");
+    const unsigned gridW = 600;
+    const unsigned ctrlW = 300;
+    const unsigned windH = 600;
 
-    Grid grid(nRows, nCols, mode);
+    sf::VideoMode       gridMode(gridW, windH);
+    sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "Grid with Control Space");
 
-    bool isMousePressed = false;
-    bool inFocus = false;
+    GridPanel grid(nRows, nCols, gridMode);
+    CtrlPanel ctrl(grid, sf::Vector2f(ctrlW, windH), sf::Vector2f(gridW, 0));
+    bool inFocus = true;
 
+    ctrl.init(window, "freesans.ttf", false);
+
+    sf::Clock deltaClock;
+
+    // lock at 30fps
+    window.setFramerateLimit(30);
 
     while (window.isOpen())
     {
-        sf::Event event;
+        sf::Event event{};
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            ImGui::SFML::ProcessEvent(event);
+
+            if (event.type == sf::Event::Closed) {
                 window.close();
-            else if (event.type == sf::Event::GainedFocus)
+            }
+            else if (event.type == sf::Event::GainedFocus) {
                 inFocus = true;
-            else if (event.type == sf::Event::LostFocus)
+            }
+            else if (event.type == sf::Event::LostFocus) {
                 inFocus = false;
+            }
+            else if (event.type == sf::Event::KeyReleased) {
+                grid.kbKeyRelHandle(event);
+            }
         }
 
         if (inFocus) {
-            // mouse pos rel to window
-            auto mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-            // implement edge detection on mouse clicks
-            // since sfml doesnt provide it
-
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                if (!isMousePressed) {
-                    // at this point the edge of the click occured
-                    // handle it
-                    grid.mouseClick(mousePos);
-                    isMousePressed = true;
-                }
-            }
-            else {
-                isMousePressed = false;
-            }
-
-            // handle mouse hover
-            grid.mouseHover(mousePos);
+            grid.mouseHandle(window);
         }
-        // draw
+
+        ctrl.loop(deltaClock.restart(), window);
+        window.clear();
         grid.draw(window);
+        CtrlPanel::draw(window);
+        window.display();
     }
 
     return 0;
