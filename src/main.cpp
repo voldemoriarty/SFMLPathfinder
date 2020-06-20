@@ -164,6 +164,17 @@ int main()
     bool inFocus = true;
 
     ImGui::SFML::Init(window);
+    ImGui::StyleColorsLight();
+
+    // init fonts
+    auto& io    = ImGui::GetIO();
+    auto font   = io.Fonts->AddFontFromFileTTF("freesans.ttf", 20.0f);
+    ImGui::SFML::UpdateFontTexture();
+
+    if (font == nullptr) {
+        std::cerr << "Error loading font. Using default" << std::endl;
+    }
+
     sf::Clock deltaClock;
 
     // lock at 30fps
@@ -208,7 +219,9 @@ int main()
         ImGui::SetNextWindowSize(sf::Vector2f(ctrlW, windH), ImGuiCond_Once);
 
         ImGui::Begin("Control panel");
+        ImGui::PushFont(font);
         ImGui::Button("I'm a button");
+        ImGui::PopFont();
         ImGui::End();
 
         window.clear();
