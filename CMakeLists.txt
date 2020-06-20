@@ -25,8 +25,10 @@ add_executable(${PROJECT_NAME}
   src/imgui/imgui_widgets.cpp
   src/imgui/imgui_draw.cpp
   src/imgui/imgui-SFML.cpp
-  src/GridArtist.cpp
-  src/GridArtist.h
+  src/GridPanel.cpp
+  src/GridPanel.h
+  src/ControlPanel.cpp
+  src/ControlPanel.h
 )
 
 # include directories

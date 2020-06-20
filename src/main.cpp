@@ -2,7 +2,7 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 #include <iostream>
-#include "GridArtist.h"
+#include "GridPanel.h"
 
 int main()
 {
@@ -16,7 +16,7 @@ int main()
     sf::VideoMode       gridMode(gridW, windH);
     sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "Grid with Control Space");
 
-    GridArtist grid(nRows, nCols, gridMode);
+    GridPanel grid(nRows, nCols, gridMode);
 
     bool inFocus = true;
 

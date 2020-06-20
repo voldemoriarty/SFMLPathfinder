@@ -2,13 +2,13 @@
 // Created by saad on 6/20/20.
 //
 
-#ifndef SFMLPATHFINDER_GRIDARTIST_H
-#define SFMLPATHFINDER_GRIDARTIST_H
+#ifndef SFMLPATHFINDER_GRIDPANEL_H
+#define SFMLPATHFINDER_GRIDPANEL_H
 
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-struct GridArtist {
+struct GridPanel {
     // helper to create a 2D vector
     using RowVector = std::vector<sf::RectangleShape>;
 
@@ -35,7 +35,7 @@ struct GridArtist {
      * Create a grid of specified rows and cols divided evenly in a window of size
      * windowDim and starting position origin
      */
-    GridArtist(unsigned nRows, unsigned nCols, sf::VideoMode windowDim, sf::Vector2f origin = sf::Vector2f(0, 0));
+    GridPanel(unsigned nRows, unsigned nCols, sf::VideoMode windowDim, sf::Vector2f origin = sf::Vector2f(0, 0));
 
     /*
      * Increase row and cols by given amount
@@ -90,4 +90,4 @@ struct GridArtist {
 };
 
 
-#endif //SFMLPATHFINDER_GRIDARTIST_H
+#endif //SFMLPATHFINDER_GRIDPANEL_H

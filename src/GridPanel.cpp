@@ -2,9 +2,9 @@
 // Created by saad on 6/20/20.
 //
 
-#include "GridArtist.h"
+#include "GridPanel.h"
 
-GridArtist::GridArtist(const unsigned int nRows, const unsigned int nCols, sf::VideoMode windowDim, sf::Vector2f origin)
+GridPanel::GridPanel(const unsigned int nRows, const unsigned int nCols, sf::VideoMode windowDim, sf::Vector2f origin)
         :
         nRows(nRows),
         nCols(nCols),
@@ -14,33 +14,33 @@ GridArtist::GridArtist(const unsigned int nRows, const unsigned int nCols, sf::V
     resize(windowDim);
 }
 
-void GridArtist::changeRC(const unsigned int deltaR, const unsigned int deltaC) {
+void GridPanel::changeRC(const unsigned int deltaR, const unsigned int deltaC) {
     nCols += deltaC;
     nRows += deltaR;
     resize(vidMode);
 }
 
-void GridArtist::incCols() {
+void GridPanel::incCols() {
     changeRC(0, 1);
 }
 
-void GridArtist::incRows() {
+void GridPanel::incRows() {
     changeRC(1, 0);
 }
 
-void GridArtist::decCols() {
+void GridPanel::decCols() {
     if (nCols != 0) {
         changeRC(0, -1);
     }
 }
 
-void GridArtist::decRows() {
+void GridPanel::decRows() {
     if (nRows != 0) {
         changeRC(-1, 0);
     }
 }
 
-void GridArtist::resize(const sf::VideoMode &newSize) {
+void GridPanel::resize(const sf::VideoMode &newSize) {
     size = sf::Vector2f((float) newSize.width / (float) nCols, (float) newSize.height / (float) nRows);
 
     // clear the rects from the vector
@@ -70,7 +70,7 @@ void GridArtist::resize(const sf::VideoMode &newSize) {
     }
 }
 
-void GridArtist::draw(sf::RenderWindow &window) {
+void GridPanel::draw(sf::RenderWindow &window) {
     // draw them rects
     for (auto& row : rects) {
         for (auto& rect : row) {
@@ -79,7 +79,7 @@ void GridArtist::draw(sf::RenderWindow &window) {
     }
 }
 
-void GridArtist::toggleRect(sf::RectangleShape &rect) {
+void GridPanel::toggleRect(sf::RectangleShape &rect) {
     if (rect.getFillColor() == sf::Color::Blue) {
         rect.setFillColor(sf::Color::Yellow);
     }
@@ -88,7 +88,7 @@ void GridArtist::toggleRect(sf::RectangleShape &rect) {
     }
 }
 
-void GridArtist::mouseHandle(sf::RenderWindow &window) {
+void GridPanel::mouseHandle(sf::RenderWindow &window) {
     static bool isMousePressed = false;
 
     // mouse pos rel to window
@@ -130,7 +130,7 @@ void GridArtist::mouseHandle(sf::RenderWindow &window) {
     }
 }
 
-void GridArtist::kbKeyRelHandle(sf::Event &e) {
+void GridPanel::kbKeyRelHandle(sf::Event &e) {
     switch (e.key.code) {
         case sf::Keyboard::Add:
             incCols();
