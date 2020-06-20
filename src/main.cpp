@@ -25,11 +25,16 @@ struct Grid {
     // the window size info
     sf::VideoMode vidMode;
 
-    Grid(const unsigned nRows, const unsigned nCols, const sf::VideoMode windowDim) : 
+    // origin of the grid
+    // this acts as the (0,0)
+    sf::Vector2f origin;
+
+    Grid(const unsigned nRows, const unsigned nCols, const sf::VideoMode windowDim, const sf::Vector2f origin = sf::Vector2f(0, 0)) : 
     nRows(nRows), 
     nCols(nCols), 
     vidMode(windowDim),
-    _rects(nRows* nCols) {
+    origin(origin),
+    _rects((unsigned long long )nRows * nCols) {
         resize(windowDim);
     }
 
@@ -71,13 +76,16 @@ struct Grid {
         for (auto i = 0; i < nRows; ++i) {
             for (auto j = 0; j < nCols; ++j) {
                 sf::RectangleShape rect;
+                sf::Vector2f pos(i * size.x, j * size.y);
+
                 rect.setSize(size);
                 rect.setFillColor(sf::Color::Blue);
                 rect.setOutlineThickness(-outline);
                 rect.setOutlineColor(sf::Color::Black);
 
                 // set the position in the matrix
-                rect.setPosition(i * size.x, j * size.y);
+                // add an offset to the origin
+                rect.setPosition(pos + origin);
 
                 // add the rects to the drawing vector
                 _rects.push_back(rect);
@@ -153,7 +161,7 @@ int main()
     Grid grid(nRows, nCols, gridMode);
 
     bool isMousePressed = false;
-    bool inFocus = false;
+    bool inFocus = true;
 
     ImGui::SFML::Init(window);
     sf::Clock deltaClock;
