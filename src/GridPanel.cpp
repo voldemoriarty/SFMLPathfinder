@@ -196,10 +196,7 @@ GridPanel::Idx GridPanel::rectToIdx(GridPanel::Rect *rect) {
 }
 
 GridPanel::Rect* GridPanel::findNeighbour(GridPanel::Rect *src, int dir) {
-    auto idx = rectToIdx(src);
-    auto row = idx.first;
-    auto col = idx.second;
-
+    auto [row, col] = rectToIdx(src);
     Rect *ret;
 
     switch (dir) {

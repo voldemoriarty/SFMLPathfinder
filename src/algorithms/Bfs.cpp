@@ -7,19 +7,14 @@
 void Bfs::run(GridPanel &grid) {
     discTable.clear();
     parentTable.clear();
-    grid.clearAllPaths();
 
-    auto start      = grid.startPoint;
-    auto end        = grid.endPoint;
-
-    // do nothing if start or end is undefined
-    if (start == nullptr || end == nullptr) {
+    if (!checkGrid(grid)) {
         return;
     }
 
     // mark root as discovered
-    discTable[start] = true;
-    q.push(start);
+    discTable[beg] = true;
+    q.push(beg);
 
     while (!q.empty()) {
         auto v = q.front();
@@ -56,7 +51,7 @@ void Bfs::run(GridPanel &grid) {
     if (parentItr != parentTable.end()) {
         // path exists
         auto rect = parentItr->second;
-        while (rect != start) {
+        while (rect != beg) {
             grid.changeRect(*rect, RectType::path);
             rect = parentTable[rect];
         }

@@ -9,6 +9,12 @@
 
 struct Algorithm {
     using Rect = GridPanel::Rect;
+
+    Rect* beg = nullptr;
+    Rect* end = nullptr;
+
+    bool checkGrid(GridPanel &grid);
+
     virtual void run(GridPanel &grid) = 0;
 };
 
