@@ -75,14 +75,26 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
     // algorithms
     {
+        static bool pathFound = false;
         ImGui::Text("Algorithms");
         if (ImGui::Button("BFS")) {
             static Bfs bfs;
-            bfs.run(grid);
+            pathFound = bfs.runComplete(grid);
         }
         if (ImGui::Button("Clear")) {
             grid.clearAll();
+            pathFound = false;
         }
+
+        ImGui::Separator();
+        const auto colGreen = ImVec4(0, 1, 0, 1);
+        const auto colRed = ImVec4(1, 0, 0, 1);
+        if (pathFound) {
+            ImGui::TextColored(colGreen, "Path found");
+        } else {
+            ImGui::TextColored(colRed, "Path not found");
+        }
+        ImGui::Separator();
     }
 
     ImGui::End();
