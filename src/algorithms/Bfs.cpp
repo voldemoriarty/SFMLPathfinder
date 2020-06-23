@@ -4,51 +4,38 @@
 
 #include "Bfs.h"
 
-void Bfs::run(GridPanel &grid) {
+bool Bfs::runComplete(GridPanel &grid) {
+    if (!preRun(grid))
+        return false;
+
+    while (!stepRun(grid));
+    return postRun(grid);
+}
+
+bool Bfs::preRun(GridPanel &grid) {
     discTable.clear();
     parentTable.clear();
 
     if (!checkGrid(grid)) {
-        return;
+        return false;
     }
 
     // mark root as discovered
     discTable[beg] = true;
     q.push(beg);
+    return true;
+}
 
-    while (!q.empty()) {
-        auto v = q.front();
-        q.pop();
-
-        if (v == end) {
-            break;
-        }
-
-        // iterate all the neighbours
-        // start from north then go clockwise
-        for (int i = 0; i < 4; ++i) {
-            auto neighbour = grid.findNeighbour(v, i);
-
-            // if the neighbour exists and is not a wall
-            if (neighbour != nullptr && neighbour->second != RectType::wall) {
-                // check if the neighbour isn't already discovered
-                if (discTable.count(neighbour) == 0) {
-                    discTable.insert_or_assign(neighbour, true);
-                    parentTable.insert_or_assign(neighbour, v);
-                    q.push(neighbour);
-                }
-            }
-        }
-    }
-
+bool Bfs::postRun(GridPanel &grid) {
     // at this point, we have either found the end
     // in which case, its parent is available in parent table
     // else we couldn't find it
 
     // draw the path; if exists
     auto parentItr = parentTable.find(end);
+    bool found = parentItr != parentTable.end();
 
-    if (parentItr != parentTable.end()) {
+    if (found) {
         // path exists
         auto rect = parentItr->second;
         while (rect != beg) {
@@ -60,4 +47,37 @@ void Bfs::run(GridPanel &grid) {
     // empty the queue
     while (!q.empty())
         q.pop();
+
+    return found;
+}
+
+bool Bfs::stepRun(GridPanel &grid) {
+
+    if (q.empty())
+        return true;
+
+    auto v = q.front();
+    q.pop();
+
+    if (v == end) {
+        return true;
+    }
+
+    // iterate all the neighbours
+    // start from north then go clockwise
+    for (int i = 0; i < 4; ++i) {
+        auto neighbour = grid.findNeighbour(v, i);
+
+        // if the neighbour exists and is not a wall
+        if (neighbour != nullptr && neighbour->second != RectType::wall) {
+            // check if the neighbour isn't already discovered
+            if (discTable.count(neighbour) == 0) {
+                discTable.insert_or_assign(neighbour, true);
+                parentTable.insert_or_assign(neighbour, v);
+                q.push(neighbour);
+            }
+        }
+    }
+
+    return false;
 }
