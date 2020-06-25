@@ -60,8 +60,12 @@ bool Bfs::stepRun(GridPanel &grid) {
     q.pop();
 
     if (v == end) {
+        grid.clearFocus();
         return true;
     }
+
+    // highlight the rect
+    grid.putInFocus(v);
 
     // iterate all the neighbours
     // start from north then go clockwise

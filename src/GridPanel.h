@@ -27,6 +27,9 @@ struct GridPanel {
     Rect *startPoint    = nullptr;
     Rect *endPoint      = nullptr;
 
+    // old focus point
+    Rect *oldFocus      = nullptr;
+
     // grid dimensions
     unsigned nRows, nCols;
 
@@ -131,5 +134,16 @@ struct GridPanel {
      * 3 -> west
      */
     Rect* findNeighbour(Rect *src, int dir);
+
+    /*
+     * change the rect outline to cyan. And change the previous one
+     * to normal
+     */
+    void putInFocus(Rect *rect);
+
+    /*
+     * clear the focus. Clear the rect outline
+     */
+    void clearFocus();
 };
 

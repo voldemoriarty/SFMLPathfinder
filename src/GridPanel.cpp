@@ -255,3 +255,18 @@ void GridPanel::clearAll() {
         }
     }
 }
+
+void GridPanel::putInFocus(GridPanel::Rect *rect) {
+    rect->first.setOutlineColor(sf::Color::Cyan);
+    if (oldFocus != nullptr && oldFocus != rect) {
+        oldFocus->first.setOutlineColor(sf::Color::Black);
+    }
+    oldFocus = rect;
+}
+
+void GridPanel::clearFocus() {
+    if (oldFocus != nullptr) {
+        oldFocus->first.setOutlineColor(sf::Color::Black);
+        oldFocus = nullptr;
+    }
+}
