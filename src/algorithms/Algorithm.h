@@ -2,8 +2,7 @@
 // Created by saad on 6/20/20.
 //
 
-#ifndef SFMLPATHFINDER_ALGORITHM_H
-#define SFMLPATHFINDER_ALGORITHM_H
+#pragma once
 
 #include "../GridPanel.h"
 
@@ -40,4 +39,3 @@ struct Algorithm {
     virtual bool postRun(GridPanel &grid) = 0;
 };
 
-#endif //SFMLPATHFINDER_ALGORITHM_H

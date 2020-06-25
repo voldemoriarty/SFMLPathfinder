@@ -2,8 +2,7 @@
 // Created by saad on 6/20/20.
 //
 
-#ifndef SFMLPATHFINDER_CTRLPANEL_H
-#define SFMLPATHFINDER_CTRLPANEL_H
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -41,5 +40,3 @@ struct CtrlPanel {
     static void draw(sf::RenderWindow &window) ;
 };
 
-
-#endif //SFMLPATHFINDER_CTRLPANEL_H

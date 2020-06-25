@@ -2,8 +2,7 @@
 // Created by saad on 6/20/20.
 //
 
-#ifndef SFMLPATHFINDER_RECTTYPE_H
-#define SFMLPATHFINDER_RECTTYPE_H
+#pragma once
 
 enum class RectType : int {
     start = 0,  // start node
@@ -12,5 +11,3 @@ enum class RectType : int {
     space,      // empty space
     path        // path from source to dest
 };
-
-#endif //SFMLPATHFINDER_RECTTYPE_H

@@ -2,8 +2,7 @@
 // Created by saad on 6/20/20.
 //
 
-#ifndef SFMLPATHFINDER_BFS_H
-#define SFMLPATHFINDER_BFS_H
+#pragma once
 
 #include "Algorithm.h"
 #include <queue>
@@ -19,5 +18,3 @@ struct Bfs : public Algorithm {
     bool postRun(GridPanel &grid) override;
     bool stepRun(GridPanel &grid) override;
 };
-
-#endif //SFMLPATHFINDER_BFS_H

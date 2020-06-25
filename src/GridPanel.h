@@ -2,8 +2,7 @@
 // Created by saad on 6/20/20.
 //
 
-#ifndef SFMLPATHFINDER_GRIDPANEL_H
-#define SFMLPATHFINDER_GRIDPANEL_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -134,4 +133,3 @@ struct GridPanel {
     Rect* findNeighbour(Rect *src, int dir);
 };
 
-#endif //SFMLPATHFINDER_GRIDPANEL_H
