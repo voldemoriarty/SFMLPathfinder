@@ -13,8 +13,6 @@ bool Bfs::runComplete(GridPanel &grid) {
 }
 
 bool Bfs::preRun(GridPanel &grid) {
-    discTable.clear();
-    parentTable.clear();
 
     if (!checkGrid(grid)) {
         return false;
@@ -44,10 +42,7 @@ bool Bfs::postRun(GridPanel &grid) {
         }
     }
 
-    // empty the queue
-    while (!q.empty())
-        q.pop();
-
+    reset();
     return found;
 }
 
@@ -84,4 +79,10 @@ bool Bfs::stepRun(GridPanel &grid) {
     }
 
     return false;
+}
+
+void Bfs::reset() {
+    discTable.clear();
+    parentTable.clear();
+    q = std::queue<Rect *>{};
 }

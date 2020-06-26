@@ -19,6 +19,10 @@ struct Algorithm {
     // base class
     bool checkGrid(GridPanel &grid);
 
+
+    // reset the state
+    virtual void reset() = 0;
+
     // run the algorithm
     // returns true if path found
     virtual bool runComplete(GridPanel &grid) = 0;

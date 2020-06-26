@@ -75,9 +75,9 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     }
 
     // algorithm speed selectors
-    static int speed = 10;
+    static int period = 10;
     {
-        ImGui::SliderInt("Speed", &speed, 0, 100);
+        ImGui::SliderInt("Period (ms)", &period, 0, 1000);
         ImGui::Separator();
     }
 
@@ -98,13 +98,24 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
         ImGui::Text("Algorithms");
         if (ImGui::Button("BFS")) {
-            runner.setPeriod(sf::milliseconds(100));
-            bfs.preRun(grid);
-            running = true;
+            if (period > 0) {
+                runner.setPeriod(sf::milliseconds(period));
+
+                if (running)
+                    runner.alg->reset();
+
+                bfs.preRun(grid);
+                running = true;
+            }
+            else {
+                pathFound = bfs.runComplete(grid);
+                running = false;
+            }
         }
         if (ImGui::Button("Clear")) {
             grid.clearAll();
             pathFound = false;
+            running = false;
         }
 
         ImGui::Separator();

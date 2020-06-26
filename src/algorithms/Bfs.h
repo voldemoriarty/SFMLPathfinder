@@ -17,4 +17,5 @@ struct Bfs : public Algorithm {
     bool preRun(GridPanel &grid) override;
     bool postRun(GridPanel &grid) override;
     bool stepRun(GridPanel &grid) override;
+    void reset() override;
 };

@@ -238,10 +238,12 @@ void GridPanel::changeRect(GridPanel::Rect &rect, RectType to) {
 }
 
 void GridPanel::clearAllPaths() {
+    oldFocus = nullptr;
     for (auto & row: rects) {
         for (auto & rect : row) {
             if (rect.second == RectType::path)
                 changeRect(rect, RectType::space);
+            rect.first.setOutlineColor(sf::Color::Black);
         }
     }
 }
@@ -249,9 +251,11 @@ void GridPanel::clearAllPaths() {
 void GridPanel::clearAll() {
     startPoint  = nullptr;
     endPoint    = nullptr;
+    oldFocus    = nullptr;
     for (auto & row: rects) {
         for (auto & rect : row) {
             changeRect(rect, RectType::space);
+            rect.first.setOutlineColor(sf::Color::Black);
         }
     }
 }
