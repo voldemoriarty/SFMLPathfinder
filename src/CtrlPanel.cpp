@@ -5,7 +5,11 @@
 #include "CtrlPanel.h"
 #include "algorithms/Bfs.h"
 
-
+/*
+ * Add algorithm with name to the vector
+ * Two vectors are maintained, this is because imgui requires a
+ * pointer to zero terminated string of names to appear in a combo box
+ */
 static void addAlgo(CtrlPanel *panel, Algorithm *alg, const char *name) {
     panel->algs.emplace_back(alg);
     panel->algNames.emplace_back(name);
