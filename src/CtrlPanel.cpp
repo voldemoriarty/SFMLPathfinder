@@ -73,6 +73,13 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         ImGui::Separator();
     }
 
+    // algorithm speed selectors
+    static int speed = 10;
+    {
+        ImGui::SliderInt("Speed", &speed, 0, 100);
+        ImGui::Separator();
+    }
+
     // algorithms
     {
         static bool pathFound = false;
