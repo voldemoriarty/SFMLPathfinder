@@ -11,6 +11,8 @@ CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         grid(grid),
         size(size),
         pos(pos) {
+    algs.emplace_back(new Bfs);
+    algNames.emplace_back("BFS");
 }
 
 void CtrlPanel::init(sf::RenderWindow &window, const char *fileName, bool lightTheme) {
@@ -84,9 +86,9 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     // algorithms
     {
         static bool pathFound = false;
-        static Bfs bfs;
-        static AlgoRunner runner(&bfs);
         static bool running = false;
+        static int algIndex = 0;
+        static AlgoRunner runner(algs[algIndex]);
 
         if (running) {
             bool done = runner.step(grid);
@@ -97,18 +99,23 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         }
 
         ImGui::Text("Algorithms");
-        if (ImGui::Button("BFS")) {
+        ImGui::Combo("Algorithms", &algIndex, algNames.data(), algNames.size());
+        if (ImGui::Button("Run")) {
             if (period > 0) {
                 runner.setPeriod(sf::milliseconds(period));
 
                 if (running)
                     runner.alg->reset();
 
-                bfs.preRun(grid);
+                runner.alg = algs[algIndex];
+                runner.alg->preRun(grid);
                 running = true;
             }
             else {
-                pathFound = bfs.runComplete(grid);
+                if (running)
+                    runner.alg->reset();
+
+                pathFound = algs[algIndex]->runComplete(grid);
                 running = false;
             }
         }

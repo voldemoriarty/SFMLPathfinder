@@ -10,6 +10,8 @@
 #include <imgui.h>
 #include "GridPanel.h"
 #include "RectType.h"
+#include "algorithms/Algorithm.h"
+#include "algorithms/AlgoRunner.h"
 
 struct CtrlPanel {
     // the associated grid
@@ -17,6 +19,10 @@ struct CtrlPanel {
 
     // the font to use
     ImFont *font = nullptr;
+
+    // the list of algorithms
+    std::vector<Algorithm *> algs;
+    std::vector<const char *> algNames;
 
     // the size and pos of panel
     // in the window
