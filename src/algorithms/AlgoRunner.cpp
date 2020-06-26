@@ -10,7 +10,6 @@ void AlgoRunner::setPeriod(sf::Time p) {
 
 AlgoRunner::AlgoRunner(Algorithm *alg) : alg(alg) {
     assert(alg != nullptr);
-    clk.restart();
     period = sf::Time::Zero;
 }
 
