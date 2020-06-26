@@ -6,6 +6,7 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 #include <imgui-SFML.h>
 #include <imgui.h>
 #include "GridPanel.h"
@@ -21,7 +22,8 @@ struct CtrlPanel {
     ImFont *font = nullptr;
 
     // the list of algorithms
-    std::vector<Algorithm *> algs;
+    using AlgorithmPtr = std::unique_ptr<Algorithm>;
+    std::vector<AlgorithmPtr> algs;
     std::vector<const char *> algNames;
 
     // the size and pos of panel

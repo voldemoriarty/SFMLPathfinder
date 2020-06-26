@@ -87,7 +87,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         static bool pathFound = false;
         static bool running = false;
         static int algIndex = 0;
-        static AlgoRunner runner(algs[algIndex]);
+        static AlgoRunner runner(algs[algIndex].get());
 
         if (running) {
             bool done = runner.step(grid);
@@ -106,7 +106,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
                 if (running)
                     runner.alg->reset();
 
-                runner.alg = algs[algIndex];
+                runner.alg = algs[algIndex].get();
                 runner.alg->preRun(grid);
                 running = true;
             }
@@ -147,8 +147,5 @@ void CtrlPanel::draw(sf::RenderWindow &window) {
 }
 
 CtrlPanel::~CtrlPanel() {
-    for (auto& pAlg : algs) {
-        delete pAlg;
-        pAlg = nullptr;
-    }
+    
 }
