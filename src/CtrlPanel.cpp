@@ -3,6 +3,7 @@
 //
 
 #include "CtrlPanel.h"
+#include "maze/MazeRD.h"
 #include "algorithms/Bfs.h"
 
 /*
@@ -147,6 +148,13 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
             ImGui::TextColored(colRed, "Path not found");
         }
         ImGui::Separator();
+    }
+
+    // maze
+    {
+        if (ImGui::Button("Random Maze (Recursive Division)")) {
+            makeMazeRD(grid);
+        }
     }
 
     ImGui::End();
