@@ -4,6 +4,7 @@
 
 #include "CtrlPanel.h"
 #include "algorithms/Bfs.h"
+#include "algorithms/AlgoRunner.h"
 
 CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         :
@@ -83,10 +84,23 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     // algorithms
     {
         static bool pathFound = false;
+        static Bfs bfs;
+        static AlgoRunner runner(&bfs);
+        static bool running = false;
+
+        if (running) {
+            bool done = runner.step(grid);
+            if (done) {
+                running = false;
+                pathFound = runner.post(grid);
+            }
+        }
+
         ImGui::Text("Algorithms");
         if (ImGui::Button("BFS")) {
-            static Bfs bfs;
-            pathFound = bfs.runComplete(grid);
+            runner.setPeriod(sf::milliseconds(100));
+            bfs.preRun(grid);
+            running = true;
         }
         if (ImGui::Button("Clear")) {
             grid.clearAll();

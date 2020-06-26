@@ -22,3 +22,7 @@ bool AlgoRunner::step(GridPanel &grid) {
     }
     return done;
 }
+
+bool AlgoRunner::post(GridPanel &grid) const {
+    return alg->postRun(grid);
+}

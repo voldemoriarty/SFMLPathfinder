@@ -16,5 +16,7 @@ struct AlgoRunner {
     void setPeriod(sf::Time p);
 
     bool step(GridPanel &grid);
+
+    bool post(GridPanel &grid) const;
 };
 
