@@ -56,8 +56,8 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         static int rows_old = (int) grid.nRows, cols_old = (int) grid.nCols;
         static bool same = true;
         int rows = (int) grid.nRows, cols = (int) grid.nCols;
-        ImGui::SliderInt("Rows", &rows, 3, 50);
-        ImGui::SliderInt("Columns", &cols, 3, 50);
+        ImGui::SliderInt("Rows", &rows, 5, 50);
+        ImGui::SliderInt("Columns", &cols, 5, 50);
         ImGui::Checkbox("Same", &same);
 
         bool colChanged = cols != cols_old;
