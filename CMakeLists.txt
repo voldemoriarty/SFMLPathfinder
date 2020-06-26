@@ -35,7 +35,7 @@ add_executable(${PROJECT_NAME}
   src/RectType.h
   src/algorithms/Algorithm.h
   src/algorithms/Bfs.h
-  src/algorithms/Bfs.cpp src/algorithms/Algorithm.cpp)
+  src/algorithms/Bfs.cpp src/algorithms/Algorithm.cpp src/algorithms/AlgoRunner.cpp src/algorithms/AlgoRunner.h)
 
 # include directories
 target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui")
