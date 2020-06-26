@@ -132,8 +132,10 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         }
 
         ImGui::Separator();
+
         const auto colGreen = ImVec4(0, 1, 0, 1);
-        const auto colRed = ImVec4(1, 0, 0, 1);
+        const auto colRed   = ImVec4(1, 0, 0, 1);
+
         if (pathFound) {
             ImGui::TextColored(colGreen, "Path found");
         } else {
