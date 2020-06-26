@@ -5,13 +5,18 @@
 #include "CtrlPanel.h"
 #include "algorithms/Bfs.h"
 
+
+static void addAlgo(CtrlPanel *panel, Algorithm *alg, const char *name) {
+    panel->algs.emplace_back(alg);
+    panel->algNames.emplace_back(name);
+}
+
 CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         :
         grid(grid),
         size(size),
         pos(pos) {
-    algs.emplace_back(new Bfs);
-    algNames.emplace_back("BFS");
+    addAlgo(this, new Bfs, "Breadth First Search");
 }
 
 void CtrlPanel::init(sf::RenderWindow &window, const char *fileName, bool lightTheme) {
