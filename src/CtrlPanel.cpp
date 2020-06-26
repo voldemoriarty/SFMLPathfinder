@@ -118,6 +118,9 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
                 running = false;
             }
         }
+
+        ImGui::SameLine();
+        
         if (ImGui::Button("Clear")) {
             grid.clearAll();
             pathFound = false;
