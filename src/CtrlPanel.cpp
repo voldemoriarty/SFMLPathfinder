@@ -146,6 +146,4 @@ void CtrlPanel::draw(sf::RenderWindow &window) {
     ImGui::SFML::Render(window);
 }
 
-CtrlPanel::~CtrlPanel() {
-    
-}
+CtrlPanel::~CtrlPanel() = default;
