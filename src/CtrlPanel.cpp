@@ -98,7 +98,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         }
 
         ImGui::Text("Algorithms");
-        ImGui::Combo("Algorithms", &algIndex, algNames.data(), algNames.size());
+        ImGui::Combo("Algorithms", &algIndex, algNames.data(), (int) algNames.size());
         if (ImGui::Button("Run")) {
             if (period > 0) {
                 runner.setPeriod(sf::milliseconds(period));
