@@ -4,7 +4,6 @@
 
 #include "CtrlPanel.h"
 #include "algorithms/Bfs.h"
-#include "algorithms/AlgoRunner.h"
 
 CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         :
@@ -142,4 +141,11 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
 void CtrlPanel::draw(sf::RenderWindow &window) {
     ImGui::SFML::Render(window);
+}
+
+CtrlPanel::~CtrlPanel() {
+    for (auto& pAlg : algs) {
+        delete pAlg;
+        pAlg = nullptr;
+    }
 }

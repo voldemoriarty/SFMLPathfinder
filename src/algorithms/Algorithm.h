@@ -41,5 +41,7 @@ struct Algorithm {
     // on the grid
     // returns true if the algorithm found a path
     virtual bool postRun(GridPanel &grid) = 0;
+
+    virtual ~Algorithm();
 };
 

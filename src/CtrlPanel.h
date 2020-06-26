@@ -43,6 +43,8 @@ struct CtrlPanel {
     /*
      * draw
      */
-    static void draw(sf::RenderWindow &window) ;
+    static void draw(sf::RenderWindow &window);
+
+    ~CtrlPanel();
 };
 

@@ -12,3 +12,5 @@ bool Algorithm::checkGrid(GridPanel &grid) {
     return !(beg == nullptr || end == nullptr);
 }
 
+Algorithm::~Algorithm() = default;
+
