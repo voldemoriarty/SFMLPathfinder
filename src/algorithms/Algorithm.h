@@ -13,6 +13,9 @@ struct Algorithm {
     Rect* beg = nullptr;
     Rect* end = nullptr;
 
+    // the number of tiles checked by the algorithm
+    unsigned tiles = 0;
+
     // check if the grid is ok to run the search
     // checks if beg and end are not nullptr
     // common to all implementations hence implemented in

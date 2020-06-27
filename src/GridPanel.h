@@ -46,7 +46,7 @@ struct GridPanel {
     // these are input from the control panel
     // these control the color of the rect which is
     // clicked
-    RectType rectType = RectType::wall;
+    RectType rectType = RectType::start;
 
     /*
      * Create a grid of specified rows and cols divided evenly in a window of size
