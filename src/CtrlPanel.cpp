@@ -156,9 +156,20 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
     // maze
     {
+        static unsigned wallTiles = 0;
         if (ImGui::Button("Random Maze (Recursive Division)")) {
             makeMazeRD(grid);
+
+            // count the number of walls
+            wallTiles = 0;
+            for (auto & row : grid.rects) {
+                wallTiles += std::count_if(row.begin(), row.end(), [](const GridPanel::Rect & rect){
+                    return rect.second == RectType::wall;
+                });
+            }
         }
+        ImGui::Text("Wall tiles generated: %u", wallTiles);
+        ImGui::Text("Non-wall tiles: %u", grid.nRows * grid.nCols - wallTiles);
         ImGui::Separator();
     }
 
