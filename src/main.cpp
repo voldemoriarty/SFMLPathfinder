@@ -12,7 +12,7 @@ int main()
     const unsigned windH = 600;
 
     sf::VideoMode       gridMode(gridW, windH);
-    sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "Grid with Control Space");
+    sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "PathFinder");
 
     GridPanel grid(nRows, nCols, gridMode);
     CtrlPanel ctrl(grid, sf::Vector2f(ctrlW, windH), sf::Vector2f(gridW, 0));
