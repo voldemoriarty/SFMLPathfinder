@@ -4,14 +4,6 @@
 
 #include "Bfs.h"
 
-bool Bfs::runComplete(GridPanel &grid) {
-    if (!preRun(grid))
-        return false;
-
-    while (!stepRun(grid));
-    return postRun(grid);
-}
-
 bool Bfs::preRun(GridPanel &grid) {
     tiles = 0;
     if (!checkGrid(grid)) {

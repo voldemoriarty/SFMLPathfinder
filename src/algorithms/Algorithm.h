@@ -28,7 +28,7 @@ struct Algorithm {
 
     // run the algorithm
     // returns true if path found
-    virtual bool runComplete(GridPanel &grid) = 0;
+    bool runComplete(GridPanel &grid);
 
     // run the steps necessary for the algorithm to run
     // e.g init data structures

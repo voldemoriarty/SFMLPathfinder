@@ -12,5 +12,13 @@ bool Algorithm::checkGrid(GridPanel &grid) {
     return !(beg == nullptr || end == nullptr);
 }
 
+bool Algorithm::runComplete(GridPanel &grid) {
+    if (!preRun(grid))
+        return false;
+
+    while (!stepRun(grid));
+    return postRun(grid);
+}
+
 Algorithm::~Algorithm() = default;
 
