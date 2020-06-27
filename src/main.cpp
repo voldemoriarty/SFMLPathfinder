@@ -12,7 +12,10 @@ int main()
     const unsigned windH = 600;
 
     sf::VideoMode       gridMode(gridW, windH);
-    sf::RenderWindow    window(sf::VideoMode(gridW + ctrlW, windH), "PathFinder");
+    sf::VideoMode       windMode(gridW + ctrlW, windH);
+    const char *        title = "PathFinder";
+    const auto          style = sf::Style::Titlebar | sf::Style::Close;
+    sf::RenderWindow    window(windMode, title, style);
 
     GridPanel grid(nRows, nCols, gridMode);
     CtrlPanel ctrl(grid, sf::Vector2f(ctrlW, windH), sf::Vector2f(gridW, 0));
