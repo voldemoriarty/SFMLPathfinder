@@ -52,9 +52,9 @@ void GridPanel::resize(const sf::VideoMode &newSize) {
     // set the outline percentage (of width)
     const float outline = 0.05f * size.x;
 
-    for (auto i = 0; i < nRows; ++i) {
+    for (auto i = 0u; i < nRows; ++i) {
         rects.emplace_back(RowVector{});
-        for (auto j = 0; j < nCols; ++j) {
+        for (auto j = 0u; j < nCols; ++j) {
             sf::RectangleShape rect;
             sf::Vector2f pos(j * size.x, i * size.y);
 
@@ -190,16 +190,13 @@ void GridPanel::kbKeyRelHandle(sf::Event &e) {
 GridPanel::Idx GridPanel::rectToIdx(GridPanel::Rect *rect) {
     auto& shape = rect->first;
     Idx index;
-    index.second = shape.getPosition().x / shape.getSize().x;
-    index.first  = shape.getPosition().y / shape.getSize().y;
+    index.second = static_cast<unsigned>(shape.getPosition().x / shape.getSize().x);
+    index.first  = static_cast<unsigned>(shape.getPosition().y / shape.getSize().y);
     return index;
 }
 
 GridPanel::Rect* GridPanel::findNeighbour(GridPanel::Rect *src, int dir) {
-    auto idx = rectToIdx(src);
-    auto row = idx.first;
-    auto col = idx.second;
-
+    auto [row, col] = rectToIdx(src);
     Rect *ret;
 
     switch (dir) {
@@ -213,13 +210,13 @@ GridPanel::Rect* GridPanel::findNeighbour(GridPanel::Rect *src, int dir) {
             if (col == (nCols - 1))
                 ret =  nullptr;
             else
-                ret =  &rects[row][col + 1];
+                ret =  &rects[row][(unsigned long long)col + 1];
             break;
         case 2:
             if (row == (nRows - 1))
                 ret = nullptr;
             else
-                ret = &rects[row + 1][col];
+                ret = &rects[(unsigned long long)row + 1][col];
             break;
         case 3:
             if (col == 0)
@@ -241,10 +238,12 @@ void GridPanel::changeRect(GridPanel::Rect &rect, RectType to) {
 }
 
 void GridPanel::clearAllPaths() {
+    oldFocus = nullptr;
     for (auto & row: rects) {
         for (auto & rect : row) {
             if (rect.second == RectType::path)
                 changeRect(rect, RectType::space);
+            rect.first.setOutlineColor(sf::Color::Black);
         }
     }
 }
@@ -252,9 +251,26 @@ void GridPanel::clearAllPaths() {
 void GridPanel::clearAll() {
     startPoint  = nullptr;
     endPoint    = nullptr;
+    oldFocus    = nullptr;
     for (auto & row: rects) {
         for (auto & rect : row) {
             changeRect(rect, RectType::space);
+            rect.first.setOutlineColor(sf::Color::Black);
         }
+    }
+}
+
+void GridPanel::putInFocus(GridPanel::Rect *rect) {
+    rect->first.setOutlineColor(sf::Color::Cyan);
+    if (oldFocus != nullptr && oldFocus != rect) {
+        oldFocus->first.setOutlineColor(sf::Color::Black);
+    }
+    oldFocus = rect;
+}
+
+void GridPanel::clearFocus() {
+    if (oldFocus != nullptr) {
+        oldFocus->first.setOutlineColor(sf::Color::Black);
+        oldFocus = nullptr;
     }
 }

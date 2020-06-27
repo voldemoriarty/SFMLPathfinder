@@ -2,15 +2,17 @@
 // Created by saad on 6/20/20.
 //
 
-#ifndef SFMLPATHFINDER_CTRLPANEL_H
-#define SFMLPATHFINDER_CTRLPANEL_H
+#pragma once
 
 #include <string>
 #include <iostream>
+#include <memory>
 #include <imgui-SFML.h>
 #include <imgui.h>
 #include "GridPanel.h"
 #include "RectType.h"
+#include "algorithms/Algorithm.h"
+#include "algorithms/AlgoRunner.h"
 
 struct CtrlPanel {
     // the associated grid
@@ -18,6 +20,11 @@ struct CtrlPanel {
 
     // the font to use
     ImFont *font = nullptr;
+
+    // the list of algorithms
+    using AlgorithmPtr = std::unique_ptr<Algorithm>;
+    std::vector<AlgorithmPtr> algs;
+    std::vector<const char *> algNames;
 
     // the size and pos of panel
     // in the window
@@ -38,8 +45,8 @@ struct CtrlPanel {
     /*
      * draw
      */
-    static void draw(sf::RenderWindow &window) ;
+    static void draw(sf::RenderWindow &window);
+
+    ~CtrlPanel();
 };
 
-
-#endif //SFMLPATHFINDER_CTRLPANEL_H

@@ -3,13 +3,25 @@
 //
 
 #include "CtrlPanel.h"
+#include "maze/MazeRD.h"
 #include "algorithms/Bfs.h"
+
+/*
+ * Add algorithm with name to the vector
+ * Two vectors are maintained, this is because imgui requires a
+ * pointer to zero terminated string of names to appear in a combo box
+ */
+static void addAlgo(CtrlPanel *panel, Algorithm *alg, const char *name) {
+    panel->algs.emplace_back(alg);
+    panel->algNames.emplace_back(name);
+}
 
 CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         :
         grid(grid),
         size(size),
         pos(pos) {
+    addAlgo(this, new Bfs, "Breadth First Search");
 }
 
 void CtrlPanel::init(sf::RenderWindow &window, const char *fileName, bool lightTheme) {
@@ -45,8 +57,8 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         static int rows_old = (int) grid.nRows, cols_old = (int) grid.nCols;
         static bool same = true;
         int rows = (int) grid.nRows, cols = (int) grid.nCols;
-        ImGui::SliderInt("Rows", &rows, 3, 50);
-        ImGui::SliderInt("Columns", &cols, 3, 50);
+        ImGui::SliderInt("Rows", &rows, 5, 50);
+        ImGui::SliderInt("Columns", &cols, 5, 50);
         ImGui::Checkbox("Same", &same);
 
         bool colChanged = cols != cols_old;
@@ -73,16 +85,77 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         ImGui::Separator();
     }
 
+    // algorithm speed selectors
+    static int period = 10;
+    {
+        ImGui::SliderInt("Period (ms)", &period, 0, 1000);
+        ImGui::Separator();
+    }
+
     // algorithms
     {
-        ImGui::Text("Algorithms");
-        if (ImGui::Button("BFS")) {
-            static Bfs bfs;
-            bfs.run(grid);
+        static bool pathFound = false;
+        static bool running = false;
+        static int algIndex = 0;
+        static AlgoRunner runner(algs[algIndex].get());
+
+        if (running) {
+            bool done = runner.step(grid);
+            if (done) {
+                running = false;
+                pathFound = runner.post(grid);
+            }
         }
+
+        ImGui::Combo("Algorithms", &algIndex, algNames.data(), (int) algNames.size());
+
+        if (ImGui::Button("Run")) {
+            if (period > 0) {
+                runner.setPeriod(sf::milliseconds(period));
+
+                if (running)
+                    runner.alg->reset();
+
+                runner.alg = algs[algIndex].get();
+                runner.alg->preRun(grid);
+                running = true;
+            }
+            else {
+                if (running)
+                    runner.alg->reset();
+
+                pathFound = algs[algIndex]->runComplete(grid);
+                running = false;
+            }
+        }
+
+        ImGui::SameLine();
+        
         if (ImGui::Button("Clear")) {
             grid.clearAll();
+            pathFound = false;
+            running = false;
         }
+
+        ImGui::Separator();
+
+        const auto colGreen = ImVec4(0, 1, 0, 1);
+        const auto colRed   = ImVec4(1, 0, 0, 1);
+
+        if (pathFound) {
+            ImGui::TextColored(colGreen, "Path found");
+        } else {
+            ImGui::TextColored(colRed, "Path not found");
+        }
+        ImGui::Separator();
+    }
+
+    // maze
+    {
+        if (ImGui::Button("Random Maze (Recursive Division)")) {
+            makeMazeRD(grid);
+        }
+        ImGui::Separator();
     }
 
     ImGui::End();
@@ -92,3 +165,5 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 void CtrlPanel::draw(sf::RenderWindow &window) {
     ImGui::SFML::Render(window);
 }
+
+CtrlPanel::~CtrlPanel() = default;
