@@ -16,7 +16,7 @@ AlgoRunner::AlgoRunner(Algorithm *alg) : alg(alg) {
 bool AlgoRunner::step(GridPanel &grid) {
     bool done = false;
     if (clk.getElapsedTime() >= period) {
-        done = alg->stepRun(grid);
+        done = alg->step(grid);
         clk.restart();
     }
     return done;

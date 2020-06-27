@@ -5,7 +5,6 @@
 #include "Bfs.h"
 
 bool Bfs::preRun(GridPanel &grid) {
-    tiles = 0;
     if (!checkGrid(grid)) {
         return false;
     }
@@ -39,7 +38,6 @@ bool Bfs::postRun(GridPanel &grid) {
 }
 
 bool Bfs::stepRun(GridPanel &grid) {
-    tiles++;
     if (q.empty())
         return true;
 

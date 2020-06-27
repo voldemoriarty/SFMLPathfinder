@@ -120,7 +120,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
                     runner.alg->reset();
 
                 runner.alg = algs[algIndex].get();
-                runner.alg->preRun(grid);
+                runner.alg->init(grid);
                 running = true;
             }
             else {

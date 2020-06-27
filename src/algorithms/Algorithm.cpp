@@ -20,5 +20,15 @@ bool Algorithm::runComplete(GridPanel &grid) {
     return postRun(grid);
 }
 
+bool Algorithm::step(GridPanel &grid) {
+    tiles++;
+    return stepRun(grid);
+}
+
+bool Algorithm::init(GridPanel &grid) {
+    tiles = 0;
+    return preRun(grid);
+}
+
 Algorithm::~Algorithm() = default;
 
