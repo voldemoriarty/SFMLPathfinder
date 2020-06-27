@@ -97,9 +97,11 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         static bool pathFound = false;
         static bool running = false;
         static int algIndex = 0;
+        static unsigned tiles = 0;
         static AlgoRunner runner(algs[algIndex].get());
 
         if (running) {
+            tiles = runner.alg->tiles;
             bool done = runner.step(grid);
             if (done) {
                 running = false;
@@ -110,6 +112,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         ImGui::Combo("Algorithms", &algIndex, algNames.data(), (int) algNames.size());
 
         if (ImGui::Button("Run")) {
+            pathFound = false;
             if (period > 0) {
                 runner.setPeriod(sf::milliseconds(period));
 
@@ -117,7 +120,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
                     runner.alg->reset();
 
                 runner.alg = algs[algIndex].get();
-                runner.alg->preRun(grid);
+                runner.alg->init(grid);
                 running = true;
             }
             else {
@@ -125,6 +128,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
                     runner.alg->reset();
 
                 pathFound = algs[algIndex]->runComplete(grid);
+                tiles = algs[algIndex]->tiles;
                 running = false;
             }
         }
@@ -143,18 +147,29 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         const auto colRed   = ImVec4(1, 0, 0, 1);
 
         if (pathFound) {
-            ImGui::TextColored(colGreen, "Path found");
+            ImGui::TextColored(colGreen, "Path found. Tiles checked: %u", tiles);
         } else {
-            ImGui::TextColored(colRed, "Path not found");
+            ImGui::TextColored(colRed, "Path not found. Tiles checked: %u", tiles);
         }
         ImGui::Separator();
     }
 
     // maze
     {
+        static unsigned wallTiles = 0;
         if (ImGui::Button("Random Maze (Recursive Division)")) {
             makeMazeRD(grid);
+
+            // count the number of walls
+            wallTiles = 0;
+            for (auto & row : grid.rects) {
+                wallTiles += std::count_if(row.begin(), row.end(), [](const GridPanel::Rect & rect){
+                    return rect.second == RectType::wall;
+                });
+            }
         }
+        ImGui::Text("Wall tiles generated: %u", wallTiles);
+        ImGui::Text("Non-wall tiles: %u", grid.nRows * grid.nCols - wallTiles);
         ImGui::Separator();
     }
 

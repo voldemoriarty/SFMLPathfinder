@@ -13,6 +13,9 @@ struct Algorithm {
     Rect* beg = nullptr;
     Rect* end = nullptr;
 
+    // the number of tiles checked by the algorithm
+    unsigned tiles = 0;
+
     // check if the grid is ok to run the search
     // checks if beg and end are not nullptr
     // common to all implementations hence implemented in
@@ -25,7 +28,14 @@ struct Algorithm {
 
     // run the algorithm
     // returns true if path found
-    virtual bool runComplete(GridPanel &grid) = 0;
+    bool runComplete(GridPanel &grid);
+
+    // run one loop of the algorithm by calling stepRun
+    // also update tiles
+    bool step(GridPanel &grid);
+
+    // zero the tiles and call preRun
+    bool init(GridPanel &grid);
 
     // run the steps necessary for the algorithm to run
     // e.g init data structures

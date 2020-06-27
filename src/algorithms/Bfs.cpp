@@ -4,16 +4,7 @@
 
 #include "Bfs.h"
 
-bool Bfs::runComplete(GridPanel &grid) {
-    if (!preRun(grid))
-        return false;
-
-    while (!stepRun(grid));
-    return postRun(grid);
-}
-
 bool Bfs::preRun(GridPanel &grid) {
-
     if (!checkGrid(grid)) {
         return false;
     }
@@ -47,7 +38,6 @@ bool Bfs::postRun(GridPanel &grid) {
 }
 
 bool Bfs::stepRun(GridPanel &grid) {
-
     if (q.empty())
         return true;
 

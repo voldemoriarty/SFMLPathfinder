@@ -125,12 +125,12 @@ static bool drawWall(GridPanel &panel, const Region &mazeRegion, const bool hor)
             return false;
         } else {
             const auto width = 2 * mazeSize.c - 1;
-            const auto pathC = 2 * genRandom(0, mazeSize.c);
+            const auto pathC = genRandom(0, width / 2);
 
             for (auto i = 0u; i < width; ++i) {
                 panel.changeRect(panel.rects[r][c + i], RectType::wall);
             }
-            panel.changeRect(panel.rects[r][pathC], RectType::space);
+            panel.changeRect(panel.rects[r][2 * pathC + c], RectType::space);
             return true;
         }
     } else {
@@ -143,12 +143,12 @@ static bool drawWall(GridPanel &panel, const Region &mazeRegion, const bool hor)
             return false;
         } else {
             const auto height = 2 * mazeSize.r - 1;
-            const auto pathR  = 2 * genRandom(0, mazeSize.r);
+            const auto pathR  = genRandom(0, height / 2);
 
             for (auto i = 0u; i < height; ++i) {
                 panel.changeRect(panel.rects[r + i][c], RectType::wall);
             }
-            panel.changeRect(panel.rects[pathR][c], RectType::space);
+            panel.changeRect(panel.rects[r + 2 * pathR][c], RectType::space);
             return true;
         }
     }
