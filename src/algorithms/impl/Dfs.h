@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Algorithm.h"
+#include "../Algorithm.h"
 #include <stack>
 #include <map>
 #include <set>
