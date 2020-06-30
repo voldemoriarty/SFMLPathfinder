@@ -170,7 +170,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
                 ImGui::Text("%s", name);
                 ImGui::SameLine(150.0f);
-                ImGui::Text("%u tiles", alg->tiles);
+                ImGui::Text("%.4u tiles %4.0f us", alg->tiles, alg->timeUs);
             }
         }
 
@@ -179,12 +179,14 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         const auto colGreen = ImVec4(0, 1, 0, 1);
         const auto colRed   = ImVec4(1, 0, 0, 1);
 
-        if (pathFound) {
-            ImGui::TextColored(colGreen, "Path found. Tiles checked: %u", tiles);
-        } else {
-            ImGui::TextColored(colRed, "Path not found. Tiles checked: %u", tiles);
+        if (!showAllWindow) {
+            if (pathFound) {
+                ImGui::TextColored(colGreen, "Path found. Tiles checked: %u", tiles);
+            } else {
+                ImGui::TextColored(colRed, "Path not found. Tiles checked: %u", tiles);
+            }
+            ImGui::Separator();
         }
-        ImGui::Separator();
     }
 
     // maze
