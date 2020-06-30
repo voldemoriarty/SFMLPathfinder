@@ -42,6 +42,8 @@ void CtrlPanel::init(sf::RenderWindow &window, const char *fileName, bool lightT
 }
 
 void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
+    const ImGuiWindowFlags flags = (unsigned) ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+
     ImGui::SFML::Update(window, clockTime);
     // set the position of panel
     // run only once; the user can drag and change it
@@ -49,7 +51,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     ImGui::SetNextWindowSize(size, ImGuiCond_Once);
 
     ImGui::PushFont(font);
-    ImGui::Begin("Control panel");
+    ImGui::Begin("Control panel", nullptr, flags);
 
     // row, column sliders
     {
@@ -97,6 +99,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     {
         static bool pathFound = false;
         static bool running = false;
+        static bool showAllWindow = false;
         static int algIndex = 0;
         static unsigned tiles = 0;
         static AlgoRunner runner(algs[algIndex].get());
@@ -114,6 +117,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
         if (ImGui::Button("Run")) {
             pathFound = false;
+            showAllWindow = false;
             if (period > 0) {
                 runner.setPeriod(sf::milliseconds(period));
 
@@ -135,11 +139,39 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         }
 
         ImGui::SameLine();
-        
+
         if (ImGui::Button("Clear")) {
             grid.clearAll();
             pathFound = false;
             running = false;
+            showAllWindow = false;
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Run All")) {
+            pathFound = false;
+            if (running) {
+                runner.alg->reset();
+                running = false;
+            }
+            showAllWindow = true;
+
+            for (auto & alg : algs) {
+                alg->runComplete(grid);
+            }
+        }
+
+        if (showAllWindow) {
+            ImGui::Separator();
+            for (auto i = 0u; i < algs.size(); ++i) {
+                auto &alg = algs[i];
+                auto &name = algNames[i];
+
+                ImGui::Text("%s", name);
+                ImGui::SameLine(150.0f);
+                ImGui::Text("%u tiles", alg->tiles);
+            }
         }
 
         ImGui::Separator();
