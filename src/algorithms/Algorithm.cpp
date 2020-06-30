@@ -12,8 +12,9 @@ inline auto now() {
 }
 
 template <class Time>
-inline auto microseconds(Time then, Time now) {
-    return std::chrono::duration_cast<std::chrono::microseconds>(now - then).count();
+inline auto timeMicroSeconds(Time then, Time now) {
+    using namespace std::chrono;
+    return duration_cast<microseconds>(now - then).count();
 }
 
 bool Algorithm::checkGrid(GridPanel &grid) {
@@ -31,7 +32,7 @@ bool Algorithm::runComplete(GridPanel &grid) {
 
     while (!step(grid));
     bool ret = postRun(grid);
-    timeUs = microseconds(then, now());
+    timeUs = timeMicroSeconds(then, now());
 
     return ret;
 }
