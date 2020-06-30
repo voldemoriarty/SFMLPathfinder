@@ -38,7 +38,7 @@ add_executable(${PROJECT_NAME}
   src/algorithms/Bfs.cpp
   src/algorithms/Algorithm.cpp
   src/algorithms/AlgoRunner.cpp
-  src/algorithms/AlgoRunner.h src/maze/MazeRD.h src/maze/MazeRD.cpp)
+  src/algorithms/AlgoRunner.h src/maze/MazeRD.h src/maze/MazeRD.cpp src/algorithms/Dfs.cpp src/algorithms/Dfs.h src/algorithms/All.h)
 
 # include directories
 target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui")

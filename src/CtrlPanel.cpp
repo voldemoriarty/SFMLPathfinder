@@ -4,7 +4,7 @@
 
 #include "CtrlPanel.h"
 #include "maze/MazeRD.h"
-#include "algorithms/Bfs.h"
+#include "algorithms/All.h"
 
 /*
  * Add algorithm with name to the vector
@@ -22,6 +22,7 @@ CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         size(size),
         pos(pos) {
     addAlgo(this, new Bfs, "Breadth First Search");
+    addAlgo(this, new Dfs, "Depth First Search");
 }
 
 void CtrlPanel::init(sf::RenderWindow &window, const char *fileName, bool lightTheme) {
