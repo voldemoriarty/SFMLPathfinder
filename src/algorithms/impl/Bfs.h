@@ -7,10 +7,11 @@
 #include "../Algorithm.h"
 #include <queue>
 #include <map>
+#include <set>
 
 struct Bfs : public Algorithm {
     std::queue<Rect *> q;                   // queue for search
-    std::map<Rect *, bool> discTable;       // for marking if a node has been discovered
+    std::set<Rect *> discSet;               // for marking if a node has been discovered
     std::map<Rect *, Rect *> parentTable;   // for tracing routes
 
     bool preRun(GridPanel &grid) override;

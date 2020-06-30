@@ -10,7 +10,7 @@ bool Bfs::preRun(GridPanel &grid) {
     }
 
     // mark root as discovered
-    discTable[beg] = true;
+    discSet.insert(beg);
     q.push(beg);
     return true;
 }
@@ -60,8 +60,8 @@ bool Bfs::stepRun(GridPanel &grid) {
         // if the neighbour exists and is not a wall
         if (neighbour != nullptr && neighbour->second != RectType::wall) {
             // check if the neighbour isn't already discovered
-            if (discTable.count(neighbour) == 0) {
-                discTable.insert_or_assign(neighbour, true);
+            if (discSet.count(neighbour) == 0) {
+                discSet.insert(neighbour);
                 parentTable.insert_or_assign(neighbour, v);
                 q.push(neighbour);
             }
@@ -72,7 +72,7 @@ bool Bfs::stepRun(GridPanel &grid) {
 }
 
 void Bfs::reset() {
-    discTable.clear();
+    discSet.clear();
     parentTable.clear();
     q = std::queue<Rect *>{};
 }
