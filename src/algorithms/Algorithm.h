@@ -14,7 +14,13 @@ struct Algorithm {
     Rect* end = nullptr;
 
     // the number of tiles checked by the algorithm
+    // zeroed out by init
     unsigned tiles = 0;
+
+    // the time it took for the algorithm to exec
+    // zeroed out by init
+    // filled by runComplete
+    float timeUs = 0;
 
     // check if the grid is ok to run the search
     // checks if beg and end are not nullptr

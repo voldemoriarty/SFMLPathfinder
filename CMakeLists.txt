@@ -34,11 +34,11 @@ add_executable(${PROJECT_NAME}
   src/CtrlPanel.h
   src/RectType.h
   src/algorithms/Algorithm.h
-  src/algorithms/Bfs.h
-  src/algorithms/Bfs.cpp
+  src/algorithms/impl/Bfs.h
+  src/algorithms/impl/Bfs.cpp
   src/algorithms/Algorithm.cpp
   src/algorithms/AlgoRunner.cpp
-  src/algorithms/AlgoRunner.h src/maze/MazeRD.h src/maze/MazeRD.cpp)
+  src/algorithms/AlgoRunner.h src/maze/MazeRD.h src/maze/MazeRD.cpp src/algorithms/impl/Dfs.cpp src/algorithms/impl/Dfs.h src/algorithms/All.h)
 
 # include directories
 target_include_directories(${PROJECT_NAME} PRIVATE "src/imgui")

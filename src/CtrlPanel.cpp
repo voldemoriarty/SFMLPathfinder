@@ -4,7 +4,7 @@
 
 #include "CtrlPanel.h"
 #include "maze/MazeRD.h"
-#include "algorithms/Bfs.h"
+#include "algorithms/All.h"
 
 /*
  * Add algorithm with name to the vector
@@ -22,6 +22,7 @@ CtrlPanel::CtrlPanel(GridPanel &grid, ImVec2 size, ImVec2 pos)
         size(size),
         pos(pos) {
     addAlgo(this, new Bfs, "Breadth First Search");
+    addAlgo(this, new Dfs, "Depth First Search");
 }
 
 void CtrlPanel::init(sf::RenderWindow &window, const char *fileName, bool lightTheme) {
@@ -41,6 +42,8 @@ void CtrlPanel::init(sf::RenderWindow &window, const char *fileName, bool lightT
 }
 
 void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
+    const ImGuiWindowFlags flags = (unsigned) ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+
     ImGui::SFML::Update(window, clockTime);
     // set the position of panel
     // run only once; the user can drag and change it
@@ -48,7 +51,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     ImGui::SetNextWindowSize(size, ImGuiCond_Once);
 
     ImGui::PushFont(font);
-    ImGui::Begin("Control panel");
+    ImGui::Begin("Control panel", nullptr, flags);
 
     // row, column sliders
     {
@@ -96,6 +99,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
     {
         static bool pathFound = false;
         static bool running = false;
+        static bool showAllWindow = false;
         static int algIndex = 0;
         static unsigned tiles = 0;
         static AlgoRunner runner(algs[algIndex].get());
@@ -113,6 +117,7 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
 
         if (ImGui::Button("Run")) {
             pathFound = false;
+            showAllWindow = false;
             if (period > 0) {
                 runner.setPeriod(sf::milliseconds(period));
 
@@ -134,11 +139,39 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         }
 
         ImGui::SameLine();
-        
+
         if (ImGui::Button("Clear")) {
             grid.clearAll();
             pathFound = false;
             running = false;
+            showAllWindow = false;
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Run All")) {
+            pathFound = false;
+            if (running) {
+                runner.alg->reset();
+                running = false;
+            }
+            showAllWindow = true;
+
+            for (auto & alg : algs) {
+                alg->runComplete(grid);
+            }
+        }
+
+        if (showAllWindow) {
+            ImGui::Separator();
+            for (auto i = 0u; i < algs.size(); ++i) {
+                auto &alg = algs[i];
+                auto &name = algNames[i];
+
+                ImGui::Text("%s", name);
+                ImGui::SameLine(150.0f);
+                ImGui::Text("%.4u tiles %4.0f us", alg->tiles, alg->timeUs);
+            }
         }
 
         ImGui::Separator();
@@ -146,12 +179,14 @@ void CtrlPanel::loop(sf::Time clockTime, sf::RenderWindow &window) const {
         const auto colGreen = ImVec4(0, 1, 0, 1);
         const auto colRed   = ImVec4(1, 0, 0, 1);
 
-        if (pathFound) {
-            ImGui::TextColored(colGreen, "Path found. Tiles checked: %u", tiles);
-        } else {
-            ImGui::TextColored(colRed, "Path not found. Tiles checked: %u", tiles);
+        if (!showAllWindow) {
+            if (pathFound) {
+                ImGui::TextColored(colGreen, "Path found. Tiles checked: %u", tiles);
+            } else {
+                ImGui::TextColored(colRed, "Path not found. Tiles checked: %u", tiles);
+            }
+            ImGui::Separator();
         }
-        ImGui::Separator();
     }
 
     // maze

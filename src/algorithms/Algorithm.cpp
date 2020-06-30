@@ -3,6 +3,19 @@
 //
 
 #include "Algorithm.h"
+#include <chrono>
+
+
+// too big to type
+inline auto now() {
+    return std::chrono::high_resolution_clock::now();
+}
+
+template <class Time>
+inline auto timeMicroSeconds(Time then, Time now) {
+    using namespace std::chrono;
+    return duration_cast<microseconds>(now - then).count();
+}
 
 bool Algorithm::checkGrid(GridPanel &grid) {
     grid.clearAllPaths();
@@ -13,11 +26,15 @@ bool Algorithm::checkGrid(GridPanel &grid) {
 }
 
 bool Algorithm::runComplete(GridPanel &grid) {
+    auto then = now();
     if (!init(grid))
         return false;
 
     while (!step(grid));
-    return postRun(grid);
+    bool ret = postRun(grid);
+    timeUs = timeMicroSeconds(then, now());
+
+    return ret;
 }
 
 bool Algorithm::step(GridPanel &grid) {
@@ -27,6 +44,7 @@ bool Algorithm::step(GridPanel &grid) {
 
 bool Algorithm::init(GridPanel &grid) {
     tiles = 0;
+    timeUs = 0;
     return preRun(grid);
 }
 
