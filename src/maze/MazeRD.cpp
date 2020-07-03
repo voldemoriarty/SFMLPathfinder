@@ -106,7 +106,11 @@ static Coord findMazeSize(GridPanel &panel) {
 }
 
 static unsigned genRandom(unsigned min, unsigned max) {
-    return min + (random() % (max - min));
+    return min + ((unsigned) rand() % (max - min));
+}
+
+static void initRandom() {
+  srand(time(nullptr));
 }
 
 static bool drawWall(GridPanel &panel, const Region &mazeRegion, const bool hor) {
@@ -155,7 +159,7 @@ static bool drawWall(GridPanel &panel, const Region &mazeRegion, const bool hor)
 }
 
 void makeMazeRD(GridPanel &panel) {
-    srandom(time(nullptr));
+    initRandom();
     std::stack<Region> regions;
 
     panel.clearAll();
@@ -185,11 +189,11 @@ void makeMazeRD(GridPanel &panel) {
             hor = false;
         }
         else {
-            hor = random() % 2 == 0;
+            hor = genRandom(0, 2);
         }
 
-        const auto colOffset = random() % (region.size.c);
-        const auto rowOffset = random() % (region.size.r);
+        const auto colOffset = genRandom(0, region.size.c);
+        const auto rowOffset = genRandom(0, region.size.r);
         const auto randomColIdx = region.origin.c + colOffset;
         const auto randomRowIdx = region.origin.r + rowOffset;
 
@@ -217,8 +221,7 @@ void makeMazeRD(GridPanel &panel) {
             r2.origin.r = randomRowIdx + 1;
             r2.size.c   = region.size.c;
             r2.size.r   = region.size.r - rowOffset - 1;
-        }
-        else {
+        } else {
             // the left region
             r1.origin = region.origin;
             r1.size.r = region.size.r;
